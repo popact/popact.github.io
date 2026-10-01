@@ -153,6 +153,10 @@
   td.ok { color: var(--mint); font-weight: 700; }
   td.ng { color: #6f67a0; }
   .note { color: var(--smoke); font-size: 14px; margin-top: 14px; max-width: 48em; }
+  /* 有料プランの販売が始まるまでの案内（始まったら外す） */
+  .soon { display: flex; align-items: center; gap: 12px; margin-top: 22px; padding: 14px 18px; border-radius: 16px; background: rgba(255, 95, 180, .1); border: 1.5px solid rgba(255, 95, 180, .55); font-weight: 700; }
+  .soon b { flex: 0 0 auto; padding: 2px 12px; border-radius: 999px; background: var(--pink); color: #fff; font-size: 14px; }
+  .soon span { color: var(--star); }
 
   /* ---- 動作環境・よくある質問 ---- */
   .two { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 48px; margin-top: 28px; }
@@ -281,7 +285,7 @@
       </ul>
       <div class="tiers">
         <div class="tier"><b>無料版</b>ルール 10 個まで。ゲームのプリセットは 1 つ（テンプレートから読み込める）</div>
-        <div class="tier paid"><b>ゲーム連携プラン <em>$10</em>/ 月</b>ルールとプリセットが無制限。目標を達成すると、決めた秒数だけコマンドが 2 回ずつ届く「2倍タイム」</div>
+        <div class="tier paid"><b>ゲーム連携プラン <em>¥1,700</em>/ 月</b>ルールとプリセットが無制限。目標を達成すると、決めた秒数だけコマンドが 2 回ずつ届く「2倍タイム」</div>
       </div>
     </div>
   </div>
@@ -301,7 +305,7 @@
       </ul>
       <div class="tiers">
         <div class="tier"><b>無料版</b>Windows 標準・Edge・Google 翻訳の声</div>
-        <div class="tier paid"><b>読み上げプラン <em>$10</em>/ 月</b>VOICEVOX（ずんだもんなど）や COEIROINK のキャラクターの声。声を組み合わせた「ボイスセット」で、視聴者ごとに声を変えられる</div>
+        <div class="tier paid"><b>読み上げプラン <em>¥720</em>/ 月</b>VOICEVOX（ずんだもんなど）や COEIROINK のキャラクターの声。声を組み合わせた「ボイスセット」で、視聴者ごとに声を変えられる</div>
       </div>
     </div>
   </div>
@@ -319,7 +323,7 @@
       <p>出したいものの URL を、OBS のブラウザソースか TikTok LIVE Studio の「リンク」のソースに貼るだけです（どちらも同じ URL）。ギフト・フォロー・シェアの通知が配信画面に出て、高額ギフトは特別な演出になります。</p>
       <div class="tiers">
         <div class="tier"><b>無料版</b>通知・チャット・ゴール・ランキング・ルーレット・勝敗カウンター・タイマー・時計など（右上に小さなロゴ）</div>
-        <div class="tier paid"><b>ウィジェットプラン <em>$10</em>/ 月</b>ギフトの雨・いいねのハート・花火・ギフトジャー。ロゴを外せる</div>
+        <div class="tier paid"><b>ウィジェットプラン <em>¥720</em>/ 月</b>ギフトの雨・いいねのハート・花火・ギフトジャー・四季のフレーム。ポップなテーマ（キャンディ・ステッカー・ネオンポップ）と四季のテーマ（春・夏・秋・冬）。ロゴを外せる</div>
       </div>
     </div>
   </div>
@@ -329,22 +333,25 @@
 <section id="pricing">
 <div class="wrap">
   <h2>料金</h2>
-  <p class="lead">月額です。必要なプランだけ選べて、いつでも解約できます。</p>
+  <p class="lead">月額です。必要なプランだけ選べて、いつでも解約できます。表示は税別で、購入のときに消費税（10%）が加わります。</p>
+  <div class="soon"><b>準備中</b><span>有料プランの販売は、もうすぐ始まります。それまでは無料版をお使いください。</span></div>
   <div class="tickets">
     <div class="ticket free"><h3>無料版</h3><div class="yen">¥0</div><p>接続・通知・基本のウィジェット・読み上げ・ルール 10 個</p></div>
-    <div class="ticket"><h3>読み上げ</h3><div class="yen">$10<small>/ 月</small></div><p>キャラクターの声とボイスセット</p></div>
-    <div class="ticket"><h3>ゲーム連携</h3><div class="yen">$10<small>/ 月</small></div><p>ルールとプリセットが無制限・2倍タイム</p></div>
-    <div class="ticket"><h3>ウィジェット</h3><div class="yen">$10<small>/ 月</small></div><p>演出のウィジェット（ギフトジャーなど）とロゴなし</p></div>
-    <div class="ticket set"><h3>セット</h3><div class="yen">$25<small>/ 月</small></div><p>3 つ全部。別々に買うより $5 安い</p></div>
+    <div class="ticket"><h3>読み上げ</h3><div class="yen">¥720<small>/ 月</small></div><p>キャラクターの声とボイスセット</p></div>
+    <div class="ticket"><h3>ゲーム連携</h3><div class="yen">¥1,700<small>/ 月</small></div><p>ルールとプリセットが無制限・2倍タイム</p></div>
+    <div class="ticket"><h3>ウィジェット</h3><div class="yen">¥720<small>/ 月</small></div><p>演出のウィジェット（ギフトジャーなど）とロゴなし</p></div>
+    <div class="ticket set"><h3>セット</h3><div class="yen">¥2,580<small>/ 月</small></div><p>3 つ全部。別々に買うより ¥560 安い</p></div>
   </div>
 
   <div class="table-wrap">
   <table>
     <tr><th>くらべる</th><th>無料版</th><th>読み上げ</th><th>ゲーム連携</th><th>ウィジェット</th><th>セット</th></tr>
+    <tr><td>月額（税別）</td><td>¥0</td><td>¥720</td><td>¥1,700</td><td>¥720</td><td>¥2,580</td></tr>
     <tr><td>TikTok Live 接続・ダッシュボード</td><td class="ok">✔</td><td class="ok">✔</td><td class="ok">✔</td><td class="ok">✔</td><td class="ok">✔</td></tr>
     <tr><td>OBS オーバーレイ・基本のウィジェット（チャット・ゴール・ランキング・ルーレット・勝敗カウンター・タイマーなど）</td><td class="ok">✔</td><td class="ok">✔</td><td class="ok">✔</td><td class="ok">✔</td><td class="ok">✔</td></tr>
     <tr><td>TikTok LIVE Studio で使う（ウィジェット・通知の公開 URL）</td><td class="ok">✔</td><td class="ok">✔</td><td class="ok">✔</td><td class="ok">✔</td><td class="ok">✔</td></tr>
-    <tr><td>演出のウィジェット（ギフトの雨・ハート・花火・ギフトジャー）</td><td class="ng">—</td><td class="ng">—</td><td class="ng">—</td><td class="ok">✔</td><td class="ok">✔</td></tr>
+    <tr><td>演出のウィジェット（ギフトの雨・ハート・花火・ギフトジャー・四季のフレーム）</td><td class="ng">—</td><td class="ng">—</td><td class="ng">—</td><td class="ok">✔</td><td class="ok">✔</td></tr>
+    <tr><td>ウィジェットのテーマ（キャンディ・ステッカー・ネオンポップ・春・夏・秋・冬）</td><td class="ng">—</td><td class="ng">—</td><td class="ng">—</td><td class="ok">✔</td><td class="ok">✔</td></tr>
     <tr><td>ウィジェットのロゴ</td><td>右上に小さく表示</td><td>右上に小さく表示</td><td>右上に小さく表示</td><td class="ok">外せる</td><td class="ok">外せる</td></tr>
     <tr><td>コメント読み上げ</td><td>Windows 標準・Edge・Google 翻訳ボイス</td><td class="ok">✔ ＋ VOICEVOX / COEIROINK などのキャラボイス</td><td>Windows 標準・Edge・Google 翻訳ボイス</td><td>Windows 標準・Edge・Google 翻訳ボイス</td><td class="ok">✔ ＋ VOICEVOX / COEIROINK などのキャラボイス</td></tr>
     <tr><td>読み上げボイスセット（複数ボイスの切替）</td><td class="ng">—</td><td class="ok">✔</td><td class="ng">—</td><td class="ng">—</td><td class="ok">✔</td></tr>
@@ -382,7 +389,7 @@
       <details><summary>解約したらどうなりますか？</summary>
         <p>ライセンスキーが失効し、無料版の機能範囲に戻ります。作成したルールやプリセットの設定データは消えません。</p></details>
       <details><summary>ライセンスは何台まで使えますか？</summary>
-        <p>ご自身の配信用 PC を想定して複数台のアクティベーションに対応しています（台数上限は購入ページに記載）。</p></details>
+        <p>ご自身の配信用 PC を想定して複数台のアクティベーションに対応しています（台数上限は購入ページに記載）。1 つのライセンスは 1 つの TikTok アカウントで使えます（有料プランで初めてつないだアカウントに結びつきます）。別のアカウントへの付け替えは 30 日に 1 回までです。</p></details>
       <details><summary>返金はできますか？</summary>
         <p>決済プラットフォーム（Lemon Squeezy）のポリシーに準じます。まず無料版で動作確認いただくことをおすすめします。</p></details>
     </div>
