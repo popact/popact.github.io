@@ -1,0 +1,91 @@
+/* 特定商取引法に基づく表記・利用規約・プライバシーポリシーの共通の見た目。
+   色は販売ページ（index.html）と同じ「夜空の花火」。読む文書なので、1 行を 40 字ほどに抑え、行間と見出しの前の余白を広めにとる。
+   枠は表（.facts）と案の印（.draft）だけ。見た目の値は :root に集める */
+:root {
+  --night: #1a1433; --mist: #251d47; --mist2: #30275c; --line: #4b4088;
+  --star: #f3efff; --smoke: #b9b0e0;
+  --cyan: #38c9ff; --pink: #ff5fb4; --gold: #ffc93c; --mint: #3ef0a1; --err: #ff5c7a;
+  --hair: rgba(75, 64, 136, .6);
+  /* 本文の幅: 16px の文字で 1 行 40 字ほど（余白の 24px × 2 を足した幅） */
+  --measure: 688px;
+  --gutter: 24px;
+  --fs-title: clamp(30px, 4.2vw, 44px);
+  --fs-h2: 22px;
+  --fs-h3: 17px;
+  --fs-body: 16px;
+  --sp-section: 56px;
+  --r-md: 18px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { background: var(--night); color: var(--star); font-family: "M PLUS Rounded 1c", "Yu Gothic UI", "Hiragino Sans", sans-serif; font-weight: 500; font-size: var(--fs-body); line-height: 1.95; -webkit-font-smoothing: antialiased; }
+a { color: var(--cyan); text-underline-offset: .2em; }
+a:hover { color: #7ddbff; }
+/* フォーカスの輪は線だけを足す（角の丸みは要素のまま） */
+:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+/* 画面には出さず、読み上げソフトには読ませる */
+.vh { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.wrap { max-width: var(--measure); margin: 0 auto; padding: 0 var(--gutter); }
+h1, h2, h3 { font-weight: 800; line-height: 1.3; word-break: auto-phrase; text-wrap: balance; }
+
+/* 頭: ロゴ（販売ページへ戻る） */
+.top { padding: 28px 0 0; }
+.brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 17px; color: var(--star); text-decoration: none; }
+.brand:hover { color: var(--star); }
+.brand svg { width: 30px; height: 30px; }
+.brand .by { font-size: 12px; font-weight: 700; color: var(--smoke); margin-left: -4px; align-self: flex-end; margin-bottom: 2px; }
+
+main { padding: 72px 0 0; }
+h1 { font-size: var(--fs-title); letter-spacing: -.02em; line-height: 1.2; }
+.updated { margin-top: 12px; color: var(--smoke); font-size: 14px; }
+
+/* 案の印（公開の前に外す）: いちばん目立たせる。赤い破線の枠 */
+.draft { margin-top: 28px; padding: 16px 20px; border-radius: 16px; border: 2px dashed var(--err); background: rgba(255, 92, 122, .1); }
+.draft strong { display: block; font-size: 18px; color: #ffc2cd; }
+.draft p { margin-top: 4px; color: var(--star); font-size: 15px; }
+
+/* 販売者が埋めるところ: 【要記入：〇〇】 */
+mark.todo { background: var(--err); color: #2a0a14; font-weight: 800; padding: 1px 6px; border-radius: 6px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+
+.intro { margin-top: 32px; color: var(--smoke); }
+/* 見出しは線で区切らず、前の余白で区切る */
+section { margin-top: var(--sp-section); }
+h2 { font-size: var(--fs-h2); letter-spacing: -.01em; }
+h3 { font-size: var(--fs-h3); margin-top: 28px; }
+section p, section li { color: var(--smoke); }
+section p { margin-top: 14px; }
+h2 + p, h2 + ul, h2 + ol { margin-top: 14px; }
+section ul, section ol { margin-top: 12px; padding-left: 1.4em; }
+section li + li { margin-top: 8px; }
+section li::marker { color: var(--mint); }
+section b { color: var(--star); font-weight: 700; }
+
+/* 特商法の表: 左に項目、右に中身。狭い画面では縦に積む */
+.facts { position: relative; margin-top: 36px; border-radius: var(--r-md); background: var(--mist); overflow: hidden; }
+.facts div { display: grid; grid-template-columns: 10em minmax(0, 1fr); gap: 4px 24px; padding: 18px 22px; border-bottom: 1px solid var(--hair); }
+.facts div:last-child { border-bottom: none; }
+.facts dt { font-weight: 800; color: var(--star); }
+.facts dd { color: var(--smoke); }
+.facts dd p + p { margin-top: 8px; }
+.facts .alt { font-size: 14px; }
+/* 値段の小さな表 */
+.prices { width: 100%; border-collapse: collapse; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.prices th, .prices td { padding: 5px 0; text-align: left; font-size: 15px; vertical-align: baseline; border-bottom: 1px solid var(--hair); }
+.prices tr:last-child th, .prices tr:last-child td { border-bottom: none; }
+.prices th { font-weight: 700; color: var(--star); padding-right: 12px; }
+.prices td b { color: var(--gold); font-weight: 800; }
+.prices td small { color: var(--smoke); font-size: 13px; margin-left: 6px; }
+
+footer { margin-top: 112px; padding: 32px 0 56px; border-top: 1px solid var(--hair); color: var(--smoke); font-size: 14px; }
+footer nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 24px; }
+footer nav a[aria-current="page"] { color: var(--star); text-decoration: none; font-weight: 700; }
+footer p { margin-top: 16px; font-size: 13px; }
+
+@media (max-width: 600px) {
+  :root { --gutter: 16px; --sp-section: 48px; }
+  main { padding-top: 48px; }
+  .facts div { grid-template-columns: minmax(0, 1fr); padding: 14px 16px; }
+  .prices th { white-space: nowrap; }
+  .prices td small { display: block; margin-left: 0; }
+}

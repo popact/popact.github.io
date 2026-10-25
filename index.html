@@ -3,65 +3,120 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PopAct — TikTok Live をゲームとつなぐ配信コンソール</title>
-<meta name="description" content="TikTok Live のギフト・コメント・いいねをトリガーに、Minecraft や好きなゲームへアクションを送る配信者向けコンソール。読み上げ・OBSオーバーレイ付き。">
+<title>PopAct — TikTok LIVE をゲームとつなぐ配信ツール</title>
+<meta name="description" content="TikTok LIVE のギフト・コメント・いいねで、Minecraft・GTA V・R.E.P.O. などのゲームが動く Windows 用の配信ツール。コメントの読み上げと配信画面の演出つき。無料版はずっと無料。">
+<meta name="theme-color" content="#1a1433">
+<link rel="icon" href="favicon.ico">
+<!-- SNS で共有したときの見え方。og:image は 1200×630 の画像が無いので付けていない（作ったら https://popact.github.io/ からの絶対 URL で足し、twitter:card を summary_large_image にする） -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://popact.github.io/">
+<meta property="og:site_name" content="PopAct">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="PopAct — ギフトが、ゲームを動かす。">
+<meta property="og:description" content="TikTok LIVE のギフト・コメント・いいねで、Minecraft・GTA V・R.E.P.O. などのゲームが動く Windows 用の配信ツール。無料版はずっと無料。">
+<meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
-  /* 色は「夜空の花火」: アプリのダッシュボード・ウィジェットと同じ。金は値段とコインだけに使う */
+  /* 色は「夜空の花火」: アプリのダッシュボード・ウィジェットと同じ。ふつうの数字・名前は星明かり、金はコイン・値段・達成だけに使う */
+  /* 見た目の値（文字の大きさ・余白・角の丸み・影・動き）はここに集める。
+     1 画面に 1 つの主張: 大きな見出しと短い補足、たっぷりの余白。枠は意味のあるもの（セットの金・準備中）だけにし、ほかは地の色の差と細い線で区切る */
   :root {
     --night: #1a1433; --mist: #251d47; --mist2: #30275c; --line: #4b4088;
     --star: #f3efff; --smoke: #b9b0e0;
     --cyan: #38c9ff; --pink: #ff5fb4; --gold: #ffc93c; --mint: #3ef0a1;
+    --hair: rgba(75, 64, 136, .6);
+    /* 文字の大きさ（見出し・小見出し・本文・補足） */
+    --fs-display: clamp(44px, 5vw, 72px);
+    --fs-h2: clamp(32px, 4.2vw, 56px);
+    --fs-h3: clamp(24px, 2.5vw, 34px);
+    --fs-lead: clamp(17px, 1.4vw, 20px);
+    --fs-body: 17px;
+    --fs-small: 14px;
+    /* 余白 */
+    --wrap: 1120px;
+    --gutter: 24px;
+    --sp-section: clamp(96px, 11vw, 160px);
+    --sp-head: 20px;
+    --sp-block: clamp(40px, 5vw, 64px);
+    /* 角の丸み・影 */
+    --r-lg: 28px; --r-md: 20px; --r-sm: 14px;
+    --shadow-deep: 0 48px 96px -24px rgba(5, 3, 15, .75);
+    /* ボタン */
+    --btn-h: 52px;
+    /* 動き（できることの絵が画面に入ったときの 1 回だけ） */
+    --ease: cubic-bezier(.2, .7, .2, 1);
+    --dur: .7s;
+    --rise: 14px;
+    --stagger: 110ms;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body { background: var(--night); color: var(--star); font-family: "M PLUS Rounded 1c", "Yu Gothic UI", "Hiragino Sans", sans-serif; font-weight: 500; font-size: 17px; line-height: 1.85; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { background: var(--night); color: var(--star); font-family: "M PLUS Rounded 1c", "Yu Gothic UI", "Hiragino Sans", sans-serif; font-weight: 500; font-size: var(--fs-body); line-height: 1.85; -webkit-font-smoothing: antialiased; }
   a { color: var(--cyan); text-underline-offset: .2em; }
   a:hover { color: #7ddbff; }
-  :focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; border-radius: 6px; }
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
-  h1, h2, h3 { font-weight: 800; line-height: 1.25; }
-  h2 { font-size: 34px; letter-spacing: -.01em; }
+  /* フォーカスの輪は線だけを足す（角の丸みは要素のまま。丸いボタンは丸い輪になる） */
+  :focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gutter); }
+  /* 見出しは文節の途中で折らない（auto-phrase は日本語の文節で折る。使えないブラウザーはふつうの折り返し） */
+  h1, h2, h3 { font-weight: 800; line-height: 1.25; word-break: auto-phrase; text-wrap: balance; }
+  /* 画面には出さず、読み上げソフトには読ませる */
+  .vh { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  h2 { font-size: var(--fs-h2); letter-spacing: -.02em; line-height: 1.16; }
   h3 { font-size: 22px; }
-  .lead { color: var(--smoke); max-width: 36em; }
-  section { padding: 96px 0 0; }
-  section > .wrap > h2 + .lead { margin-top: 12px; }
+  .lead { color: var(--smoke); font-size: var(--fs-lead); line-height: 1.8; max-width: 34em; word-break: auto-phrase; text-wrap: pretty; }
+  section { padding: var(--sp-section) 0 0; }
+  section > .wrap > h2 + .lead { margin-top: var(--sp-head); }
+  /* 冒頭のすぐ下は、冒頭の下の余白があるので少し詰める */
+  #start { padding-top: clamp(64px, 7vw, 112px); }
 
-  /* ---- 冒頭: 言いたいことと、動いている配信画面の見本 ---- */
-  .hero { position: relative; padding: 72px 0 24px; overflow: hidden;
+  /* ---- 冒頭: 言いたいことと、動いている配信画面の見本（見本がページでいちばん目立つもの） ---- */
+  .hero { position: relative; padding: 0 0 clamp(40px, 6vw, 88px); overflow: hidden;
     background-image: radial-gradient(1.5px 1.5px at 12% 18%, rgba(255,255,255,.55), transparent 60%), radial-gradient(1px 1px at 32% 8%, rgba(255,255,255,.4), transparent 60%),
       radial-gradient(1.5px 1.5px at 58% 26%, rgba(255,255,255,.35), transparent 60%), radial-gradient(1px 1px at 84% 12%, rgba(255,255,255,.5), transparent 60%),
       radial-gradient(1px 1px at 72% 44%, rgba(255,255,255,.3), transparent 60%), radial-gradient(1.5px 1.5px at 6% 62%, rgba(255,255,255,.3), transparent 60%); }
-  .hero .wrap { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: 56px; align-items: center; }
-  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; margin-bottom: 36px; }
+  .masthead { padding-top: 28px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; }
   .brand .by { font-size: 12px; font-weight: 700; color: var(--smoke, #b9b0e0); margin-left: -4px; align-self: flex-end; margin-bottom: 3px; }
   .brand svg { width: 34px; height: 34px; }
-  .hero h1 { font-size: clamp(40px, 6.2vw, 66px); letter-spacing: -.02em; line-height: 1.12; }
-  .hero .lead { margin-top: 22px; font-size: 18px; }
-  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-top: 34px; }
-  .btn { display: inline-flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 28px; border-radius: 999px; background: var(--pink); color: #2a0a1c; font-weight: 800; font-size: 17px; text-decoration: none; box-shadow: 0 6px 20px rgba(255, 95, 180, .35); }
+  /* 広い画面では 1 画面に冒頭だけを出す（下のセクションをのぞかせない） */
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: clamp(40px, 5vw, 80px); align-items: center; min-height: min(calc(100svh - 110px), 820px); padding-top: 24px; }
+  .hero h1 { font-size: var(--fs-display); letter-spacing: -.03em; line-height: 1.08; }
+  .hero .lead { margin-top: 28px; max-width: 30em; }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; margin-top: 40px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: var(--btn-h); padding: 0 30px; border-radius: 999px; background: var(--pink); color: #2a0a1c; font-weight: 800; font-size: 17px; text-decoration: none; box-shadow: 0 12px 32px -10px rgba(255, 95, 180, .6); transition: background-color .2s, transform .2s var(--ease); }
   .btn:hover { color: #2a0a1c; background: #ff7cc2; }
+  .btn:active { transform: scale(.98); }
   .btn svg { width: 20px; height: 20px; }
-  .actions a:not(.btn) { font-weight: 700; }
-  .fine { margin-top: 14px; font-size: 14px; color: var(--smoke); }
+  /* 2 つめの操作（料金を見る）: 同じ高さで、縁だけのボタン */
+  .btn.ghost { background: transparent; color: var(--star); box-shadow: inset 0 0 0 1.5px rgba(243, 239, 255, .32); }
+  .btn.ghost:hover { color: var(--star); background: rgba(243, 239, 255, .08); }
+  .fine { margin-top: 18px; font-size: var(--fs-small); line-height: 1.75; color: var(--smoke); max-width: 36em; }
+  .fine + .fine { margin-top: 6px; }
+  .fine b { color: var(--star); font-weight: 700; }
+  .nw { white-space: nowrap; }
+  /* 短い文は文節で折る（「ませ / ん」のような 1 文字だけの行を出さない） */
+  .fine, .step p, .tier, .ticket p, .spec dd { word-break: auto-phrase; }
 
-  /* 見本の配信画面（TikTok Live は縦長） */
-  .phone { position: relative; width: 300px; height: 580px; margin: 0 auto; border-radius: 36px; padding: 10px; background: #0d0a1c; box-shadow: 0 0 0 1.5px var(--line), 0 30px 60px rgba(0, 0, 0, .5); }
-  .screen { position: relative; width: 100%; height: 100%; border-radius: 28px; overflow: hidden;
+  /* 見本の配信画面（TikTok LIVE は縦長）。奥に動かない淡い光を置いて浮かせる */
+  .stage { position: relative; display: flex; justify-content: center; }
+  .stage::before { content: ''; position: absolute; left: 50%; top: 50%; width: 150%; height: 115%; transform: translate(-50%, -50%); background: radial-gradient(closest-side, rgba(255, 95, 180, .2), rgba(155, 107, 255, .1) 55%, transparent); pointer-events: none; }
+  .phone { position: relative; width: 320px; height: 620px; margin: 0 auto; border-radius: 44px; padding: 11px; background: #0d0a1c; box-shadow: 0 0 0 1.5px var(--line), inset 0 0 0 1px rgba(255, 255, 255, .06), var(--shadow-deep); }
+  .screen { position: relative; width: 100%; height: 100%; border-radius: 34px; overflow: hidden;
     background: linear-gradient(#2c2458 0 55%, transparent 55%),
       repeating-linear-gradient(90deg, #3f5f3a 0 20px, #4a6b43 20px 40px) 0 55% / 100% 20px no-repeat,
       repeating-linear-gradient(90deg, #5a4430 0 20px, #4c3a28 20px 40px, #604a34 40px 60px), #4c3a28; }
   .screen::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 40%, rgba(13, 10, 28, .55)); pointer-events: none; }
   .w { position: absolute; z-index: 1; left: 12px; right: 12px; border-radius: 14px; background: rgba(21, 16, 41, .9); border: 1.5px solid rgba(155, 107, 255, .45); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1); font-size: 12px; line-height: 1.3; }
   .w-status { top: 14px; display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; font-weight: 800; }
-  .w-status span { display: inline-flex; align-items: center; gap: 4px; color: var(--gold); font-variant-numeric: tabular-nums; }
+  .w-status span { display: inline-flex; align-items: center; gap: 4px; color: var(--star); font-variant-numeric: tabular-nums; }
   .w-status svg { width: 12px; height: 12px; }
   .w-status em { font-style: normal; color: var(--smoke); }
   .w-goal { top: 62px; padding: 9px 12px 10px; }
   .w-goal .t { display: flex; justify-content: space-between; align-items: baseline; font-weight: 800; margin-bottom: 7px; }
-  .w-goal .t b { color: var(--gold); font-size: 16px; }
+  .w-goal .t b { color: var(--star); font-size: 16px; font-variant-numeric: tabular-nums; }
   .w-goal .t small { color: var(--smoke); font-size: 11px; }
   .bar { position: relative; height: 16px; border-radius: 999px; background: rgba(255, 255, 255, .07); box-shadow: inset 0 2px 4px rgba(0, 0, 0, .45); }
   .bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 64%; border-radius: 999px; background: linear-gradient(90deg, var(--cyan), var(--pink)); box-shadow: 0 0 10px rgba(255, 95, 180, .5); animation: fill 2.4s cubic-bezier(.2, .8, .3, 1) both; }
@@ -74,47 +129,63 @@
   .al .av svg { width: 20px; height: 20px; }
   .al b { font-weight: 800; }
   .al .l2 { color: var(--smoke); font-weight: 700; }
-  .al .coin { display: inline-flex; align-items: center; gap: 3px; margin-left: 4px; padding: 0 6px 0 3px; border-radius: 999px; background: rgba(255, 201, 60, .16); color: var(--gold); font-weight: 800; }
+  .al .coin { display: inline-flex; align-items: center; gap: 3px; margin-left: 4px; padding: 0 6px 0 3px; border-radius: 999px; background: rgba(255, 201, 60, .16); color: var(--gold); font-weight: 800; font-variant-numeric: tabular-nums; }
   .al .coin svg { width: 11px; height: 11px; }
   .al.big { border: 2px solid var(--gold); background: linear-gradient(135deg, rgba(58, 26, 70, .97), rgba(28, 16, 52, .97)); box-shadow: 0 0 18px rgba(255, 201, 60, .5); }
   @keyframes alert { 0% { opacity: 0; transform: translateX(-16px) scale(.9); } 4% { opacity: 1; transform: none; } 30% { opacity: 1; transform: none; } 34%, 100% { opacity: 0; transform: translateY(6px); } }
-  /* ギフトジャー */
-  .jar { position: absolute; z-index: 1; right: 14px; bottom: 14px; width: 124px; height: 148px; }
-  .jar svg { width: 100%; height: 100%; overflow: visible; }
-  .drop { animation: drop 3s cubic-bezier(.5, 0, .8, .6) infinite; }
-  @keyframes drop { 0% { transform: translateY(-120px); opacity: 0; } 10% { opacity: 1; } 55%, 100% { transform: none; opacity: 1; } }
+  /* アクション一覧（どのギフトで何が起きるか。無料のウィジェット） */
+  .w-acts { left: auto; right: 12px; bottom: 14px; width: 156px; padding: 8px 10px 6px; }
+  .w-acts .t { font-weight: 800; color: var(--smoke); font-size: 11px; margin-bottom: 4px; }
+  .w-acts .r { display: flex; justify-content: space-between; align-items: center; gap: 6px; padding: 5px 0; border-top: 1px solid rgba(155, 107, 255, .22); font-weight: 800; color: var(--star); }
+  .w-acts .c { display: inline-flex; align-items: center; gap: 3px; padding: 0 6px 0 3px; border-radius: 999px; background: rgba(255, 201, 60, .16); color: var(--gold); font-variant-numeric: tabular-nums; }
+  .w-acts .c svg { width: 11px; height: 11px; }
   @media (prefers-reduced-motion: reduce) {
-    .bar i, .drop { animation: none; }
+    .bar i { animation: none; }
     .al { animation: none; } .al.a3 { opacity: 1; }
   }
 
+  /* ---- 使い始めるまで（順番のある手順なので番号を付ける）。箱にせず、上の細い線で区切る ---- */
+  .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; margin-top: var(--sp-block); }
+  .step { padding-top: 28px; border-top: 1px solid var(--hair); }
+  .step .n { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--cyan); color: #0c1a2a; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .step h3 { font-size: 22px; margin-top: 20px; }
+  .step p { color: var(--smoke); font-size: 15px; line-height: 1.85; margin-top: 10px; max-width: 34em; }
+
   /* ---- プランごとのできること ---- */
-  .feat { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 48px; align-items: center; padding: 44px 0; border-bottom: 1px solid rgba(75, 64, 136, .6); }
-  .feat:first-of-type { margin-top: 28px; }
-  .feat:last-of-type { border-bottom: none; }
-  .demo { border-radius: 22px; background: var(--mist); border: 1.5px solid var(--line); padding: 26px; min-height: 220px; display: flex; flex-direction: column; justify-content: center; gap: 12px; }
-  .feat h3 { font-size: 26px; }
-  .feat p { color: var(--smoke); margin-top: 12px; }
-  .feat ul { margin-top: 14px; padding-left: 1.2em; color: var(--smoke); }
+  /* 広い画面では絵を左右交互に置き、絵は長い文と一緒にスクロールして画面に残す（sticky） */
+  .feat { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(40px, 6vw, 96px); align-items: start; padding: clamp(64px, 8vw, 112px) 0; }
+  .feat + .feat { border-top: 1px solid var(--hair); }
+  .feat:first-of-type { margin-top: var(--sp-block); padding-top: 0; }
+  .feat:last-of-type { padding-bottom: 0; }
+  .feat:nth-of-type(even) > .demo { order: 2; }
+  .demo { position: sticky; top: 48px; border-radius: var(--r-lg); background: var(--mist); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06); padding: clamp(24px, 3vw, 40px); min-height: 320px; display: flex; flex-direction: column; justify-content: center; gap: 14px; }
+  .feat h3 { font-size: var(--fs-h3); letter-spacing: -.01em; line-height: 1.2; }
+  .feat p { color: var(--smoke); margin-top: 16px; }
+  .feat ul { margin-top: 18px; padding-left: 1.2em; color: var(--smoke); }
+  .feat ul:not(.games) > li + li { margin-top: 8px; }
   .feat li::marker { color: var(--mint); }
-  /* 無料版でできることと、プランで増えること */
-  .tiers { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; margin-top: 18px; }
-  .tier { border-radius: 16px; padding: 14px 16px; background: rgba(255, 255, 255, .04); border: 1.5px solid var(--line); font-size: 14px; line-height: 1.75; color: var(--smoke); }
-  .tier b { display: flex; align-items: baseline; gap: 6px; color: var(--star); font-size: 14px; font-weight: 800; margin-bottom: 4px; }
-  .tier b em { font-style: normal; color: var(--gold); font-size: 18px; }
-  .tier.paid { border-color: rgba(255, 201, 60, .55); background: rgba(255, 201, 60, .06); }
+  /* 送り先のゲームごとの一覧: ゲームの名前を白で前に出す */
+  .feat ul.games { margin-top: 4px; padding-left: 1.1em; list-style: circle; }
+  .feat ul.games li + li { margin-top: 4px; }
+  .feat ul.games b { color: var(--star); font-weight: 800; margin-right: .5em; }
+  /* 無料版でできることと、プランで増えること。箱にせず細い線で区切った 2 行（左に名前と値段、右に中身） */
+  .tiers { margin-top: 32px; border-top: 1px solid var(--hair); }
+  .tier { display: grid; grid-template-columns: 11em minmax(0, 1fr); gap: 6px 24px; padding: 20px 0; border-bottom: 1px solid var(--hair); font-size: 15px; line-height: 1.8; color: var(--smoke); }
+  .tier b { color: var(--star); font-size: 15px; font-weight: 800; line-height: 1.5; }
+  .tier b .pr { display: block; margin-top: 4px; white-space: nowrap; color: var(--smoke); font-size: 13px; font-weight: 700; }
+  .tier b em { font-style: normal; color: var(--gold); font-size: 22px; font-variant-numeric: tabular-nums; margin-right: 2px; }
   /* ゲーム連携の絵: ギフト → ゲームの中の出来事 */
   .rule { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px 8px 8px; border-radius: 999px; background: var(--mist2); font-weight: 800; font-size: 15px; }
+  .chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px 8px 8px; border-radius: 999px; background: var(--mist2); font-weight: 800; font-size: 15px; font-variant-numeric: tabular-nums; }
   .chip .ic { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255, 95, 180, .18); color: var(--pink); }
   .chip .ic.game { background: rgba(62, 240, 161, .16); color: var(--mint); }
   .chip .ic svg { width: 18px; height: 18px; }
   .arrow { width: 26px; height: 26px; color: var(--smoke); flex: 0 0 auto; }
-  code { font-family: Consolas, "Cascadia Mono", monospace; font-size: 13px; color: var(--smoke); background: rgba(13, 10, 28, .6); padding: 6px 10px; border-radius: 8px; display: inline-block; }
+  code { font-family: Consolas, "Cascadia Mono", monospace; font-size: 13px; color: var(--smoke); background: rgba(13, 10, 28, .6); padding: 6px 10px; border-radius: 8px; display: inline-block; align-self: flex-start; }
   /* 読み上げの絵: コメントと、読み上げる声 */
   .say { display: flex; align-items: flex-start; gap: 10px; }
   .say .bubble { padding: 8px 14px; border-radius: 16px 16px 16px 4px; background: var(--mist2); font-size: 15px; }
-  .say .bubble b { color: var(--gold); font-weight: 800; margin-right: .4em; }
+  .say .bubble b { color: var(--star); font-weight: 800; margin-right: .4em; }
   .voice { flex: 0 0 auto; margin-top: 6px; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 800; background: rgba(62, 240, 161, .16); color: var(--mint); }
   .voice.p { background: rgba(255, 95, 180, .16); color: var(--pink); }
   .voice.c { background: rgba(56, 201, 255, .16); color: var(--cyan); }
@@ -122,97 +193,140 @@
   .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
   .tile { aspect-ratio: 1; border-radius: 16px; background: #1c1538; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 13px; font-weight: 800; color: var(--smoke); }
   .tile svg { width: 62%; height: auto; }
+  /* できることの絵: 画面に入ったときに、中の部品を順に出す（1 回だけ）。下のスクリプトが html に .rv を付けたときだけ隠すので、
+     スクリプトが動かないときや、動きを減らす設定（.rv を付けない）では初めから全部出ている */
+  .rv .demo [data-i] { opacity: 0; transform: translateY(var(--rise)); transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease); transition-delay: calc(var(--i, 0) * var(--stagger)); }
+  .rv .demo.in [data-i] { opacity: 1; transform: none; }
 
-  /* ---- 使い始めるまで（順番のある手順なので番号を付ける） ---- */
-  .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
-  .step { border-radius: 20px; background: var(--mist); border: 1.5px solid var(--line); padding: 22px 22px 20px; }
-  .step .n { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--cyan); color: #0c1a2a; font-weight: 800; }
-  .step h3 { font-size: 19px; margin-top: 12px; }
-  .step p { color: var(--smoke); font-size: 15px; margin-top: 6px; }
   /* ---- 締め ---- */
-  .closing { padding-top: 110px; text-align: center; }
-  .closing .lead { margin: 12px auto 0; }
+  .closing { text-align: center; }
+  .closing .lead { margin: var(--sp-head) auto 0; }
   .closing .actions { justify-content: center; }
+  .closing .fine { margin-left: auto; margin-right: auto; }
 
   /* ---- 料金 ---- */
-  .tickets { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-top: 32px; }
-  .ticket { border-radius: 20px; background: var(--mist); border: 1.5px solid var(--line); padding: 20px 18px; display: flex; flex-direction: column; gap: 6px; }
+  .tickets { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 32px; }
+  .ticket { border-radius: var(--r-md); background: var(--mist); padding: 24px 20px; display: flex; flex-direction: column; gap: 6px; }
   .ticket h3 { font-size: 17px; }
-  .ticket .yen { font-size: 34px; font-weight: 800; color: var(--gold); line-height: 1.1; font-variant-numeric: tabular-nums; }
-  .ticket .yen small { font-size: 14px; color: var(--smoke); font-weight: 700; margin-left: 2px; }
-  .ticket p { font-size: 14px; color: var(--smoke); line-height: 1.7; }
+  .ticket .yen { margin-top: 6px; font-size: clamp(30px, 2.7vw, 38px); font-weight: 800; color: var(--gold); line-height: 1.1; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+  /* 「/ 月（税込）」は札の幅が狭いと折れるので、いつも値段の下の行に置く */
+  .ticket .yen small { display: block; margin-top: 6px; font-size: 14px; line-height: 1.3; letter-spacing: 0; color: var(--smoke); font-weight: 700; }
+  .ticket p { font-size: 14px; color: var(--smoke); line-height: 1.75; }
+  .ticket p.ex { margin-top: -2px; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .ticket p:last-child { margin-top: 10px; padding-top: 12px; border-top: 1px solid var(--hair); }
   .ticket.free .yen { color: var(--star); }
-  .ticket.set { border: 2px solid var(--gold); background: linear-gradient(160deg, #3a1a46, var(--mist) 60%); box-shadow: 0 0 24px rgba(255, 201, 60, .2); }
-  .table-wrap { margin-top: 28px; overflow-x: auto; border-radius: 20px; border: 1.5px solid var(--line); }
-  table { width: 100%; min-width: 820px; border-collapse: collapse; background: var(--mist); }
-  th, td { padding: 13px 16px; border-bottom: 1px solid rgba(75, 64, 136, .7); text-align: left; font-size: 14px; vertical-align: top; }
-  tr:last-child td { border-bottom: none; }
-  th { color: var(--smoke); font-weight: 800; font-size: 13px; background: #211a40; }
-  td:first-child { color: var(--star); font-weight: 700; width: 26%; }
+  .ticket.set { background: linear-gradient(160deg, #3a1a46, var(--mist) 60%); box-shadow: inset 0 0 0 2px var(--gold), 0 24px 56px -24px rgba(255, 201, 60, .4); }
+  /* position: relative は、表の中の見えない文字（.vh）の基準をこの枠にするため（無いとページ全体が横に広がる） */
+  .table-wrap { position: relative; margin-top: 24px; overflow-x: auto; border-radius: var(--r-md); background: var(--mist); }
+  /* 左の列（機能の名前）は横に動かしても残す（sticky）。sticky の線が消えないよう border-collapse は separate。
+     プランの 5 列は同じ幅にして、値を真ん中にそろえる */
+  table { width: 100%; min-width: 820px; table-layout: fixed; border-collapse: separate; border-spacing: 0; background: var(--mist); }
+  th, td { padding: 16px 14px; border-bottom: 1px solid var(--hair); text-align: center; font-size: 14px; line-height: 1.6; vertical-align: middle; word-break: auto-phrase; }
+  tbody tr:last-child > * { border-bottom: none; }
+  thead th { color: var(--star); font-weight: 800; font-size: 14px; background: #211a40; padding-top: 18px; padding-bottom: 18px; }
+  thead th:first-child { width: 28%; text-align: left; }
+  th[scope="row"] { text-align: left; color: var(--star); font-weight: 700; background: var(--mist); }
+  th[scope="row"] small { display: block; margin-top: 2px; color: var(--smoke); font-weight: 500; font-size: 12.5px; line-height: 1.6; }
+  thead th:first-child, th[scope="row"] { position: sticky; left: 0; z-index: 1; box-shadow: 1px 0 0 var(--hair); }
   td { color: var(--smoke); }
+  td.yen { color: var(--gold); font-weight: 800; font-size: 16px; font-variant-numeric: tabular-nums; }
+  td.yen small { display: block; color: var(--smoke); font-weight: 500; font-size: 12.5px; }
   td.ok { color: var(--mint); font-weight: 700; }
-  td.ng { color: #6f67a0; }
-  .note { color: var(--smoke); font-size: 14px; margin-top: 14px; max-width: 48em; }
+  td.ng { color: #8f7fd0; }
+  .mk { width: 20px; height: 20px; vertical-align: -4px; }
+  .note { color: var(--smoke); font-size: 15px; line-height: 1.9; margin-top: 20px; max-width: 46em; }
   /* 有料プランの販売が始まるまでの案内（始まったら外す） */
-  .soon { display: flex; align-items: center; gap: 12px; margin-top: 22px; padding: 14px 18px; border-radius: 16px; background: rgba(255, 95, 180, .1); border: 1.5px solid rgba(255, 95, 180, .55); font-weight: 700; }
-  .soon b { flex: 0 0 auto; padding: 2px 12px; border-radius: 999px; background: var(--pink); color: #fff; font-size: 14px; }
+  .soon { display: flex; align-items: center; gap: 12px; margin-top: 32px; padding: 14px 18px; border-radius: var(--r-sm); background: rgba(255, 95, 180, .1); box-shadow: inset 0 0 0 1px rgba(255, 95, 180, .45); font-weight: 700; }
+  .soon b { flex: 0 0 auto; padding: 2px 12px; border-radius: 999px; background: var(--pink); color: #2a0a1c; font-size: 14px; }
   .soon span { color: var(--star); }
 
   /* ---- 動作環境・よくある質問 ---- */
-  .two { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 48px; margin-top: 28px; }
-  .two h3 { font-size: 20px; margin-bottom: 12px; }
+  .two { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(40px, 6vw, 96px); margin-top: var(--sp-block); }
+  .two h3 { font-size: 22px; margin-bottom: 16px; }
   .spec { color: var(--smoke); font-size: 15px; }
-  .spec dt { color: var(--star); font-weight: 800; margin-top: 12px; }
+  .spec dt { color: var(--star); font-weight: 800; margin-top: 16px; }
   .spec dt:first-child { margin-top: 0; }
-  details { border-radius: 16px; background: var(--mist); border: 1.5px solid var(--line); padding: 14px 20px; margin-bottom: 10px; }
-  summary { cursor: pointer; font-weight: 800; }
-  details p { color: var(--smoke); font-size: 15px; margin-top: 8px; }
+  /* よくある質問: 箱にせず、細い線で区切った一覧。右の印は開くと回る（押したときだけの動き） */
+  details { border-bottom: 1px solid var(--hair); }
+  details:first-of-type { border-top: 1px solid var(--hair); }
+  summary { list-style: none; cursor: pointer; font-weight: 800; display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 56px; padding: 14px 4px 14px 0; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: ''; flex: 0 0 auto; width: 9px; height: 9px; border-right: 2px solid var(--smoke); border-bottom: 2px solid var(--smoke); transform: translateY(-3px) rotate(45deg); transition: transform .3s var(--ease); }
+  summary:hover::after { border-color: var(--star); }
+  details[open] > summary::after { transform: translateY(2px) rotate(-135deg); }
+  details p { color: var(--smoke); font-size: 15px; margin-top: -2px; padding-bottom: 20px; max-width: 40em; }
+  @media (prefers-reduced-motion: reduce) { summary::after, .btn { transition: none; } }
 
-  footer { margin-top: 110px; padding: 40px 0 60px; border-top: 1px solid var(--line); color: var(--smoke); font-size: 13px; line-height: 1.8; }
-  footer .cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 48px; }
-  footer h2 { font-size: 15px; color: var(--star); margin-bottom: 6px; letter-spacing: 0; }
+  footer { margin-top: clamp(80px, 9vw, 128px); padding: 48px 0 64px; border-top: 1px solid var(--hair); color: var(--smoke); font-size: 13px; line-height: 1.85; }
+  footer .cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 64px; }
+  footer h2 { font-size: 14px; line-height: 1.5; color: var(--star); margin-bottom: 8px; letter-spacing: 0; }
+  footer .more { margin-top: 6px; }
+  footer .legal { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--hair); }
+  footer .legal ul { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 14px; }
+  footer .copy { margin-top: 14px; }
 
   @media (max-width: 860px) {
-    .hero .wrap, .feat, .two, footer .cols, .steps, .tiers { grid-template-columns: minmax(0, 1fr); }
-    .hero .wrap { gap: 48px; }
-    .feat { gap: 24px; }
+    .hero-grid, .feat, .two, footer .cols, .steps { grid-template-columns: minmax(0, 1fr); }
+    .hero-grid { min-height: 0; gap: 56px; padding-top: 40px; }
+    .feat { gap: 32px; }
+    .feat:nth-of-type(even) > .demo { order: 0; }
+    .demo { position: static; min-height: 0; }
+    .steps { gap: 32px; }
     .tickets { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .ticket.set { grid-column: 1 / -1; }
-    h2 { font-size: 28px; }
-    section { padding-top: 72px; }
+    .ticket:last-child:nth-child(odd) { grid-column: 1 / -1; }
+    /* 比較表: 固定する左の列を細くして、右の列が見える幅を残す */
+    thead th:first-child { width: 10em; }
+    th[scope="row"] { padding: 14px 12px; word-break: auto-phrase; }
+    /* 1 列のときは画面の幅に合わせる（幅 320px でも「ゲームを動かす。」が 1 行に収まる） */
+    .hero h1 { font-size: clamp(34px, 10.5vw, 64px); }
+  }
+  @media (max-width: 520px) {
+    .tier { grid-template-columns: minmax(0, 1fr); }
+    .soon { flex-direction: column; align-items: flex-start; gap: 8px; }
   }
   @media (max-width: 420px) {
-    .wrap { padding: 0 16px; }
-    .phone { width: 270px; height: 522px; }
+    :root { --gutter: 16px; }
+    .phone { width: 300px; height: 580px; border-radius: 40px; }
+    .screen { border-radius: 30px; }
     .tickets { grid-template-columns: minmax(0, 1fr); }
+    .actions .btn { flex: 1 1 100%; }
+  }
+  @media (max-width: 350px) {
+    .phone { width: 270px; height: 522px; }
   }
 </style>
 </head>
 <body>
 
 <header class="hero">
-<div class="wrap">
+<div class="wrap masthead">
+  <div class="brand">
+    <svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="11" fill="#38c9ff"/><g stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M20 20 20 7M20 20l9.2-9.2M20 20h13M20 20l9.2 9.2M20 20v13M20 20l-9.2 9.2M20 20H7M20 20l-9.2-9.2"/></g><circle cx="20" cy="20" r="4.5" fill="#ff5fb4"/></svg>
+    PopAct <span class="by">by たま屋</span>
+  </div>
+</div>
+<div class="wrap hero-grid">
   <div>
-    <div class="brand">
-      <svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="11" fill="#38c9ff"/><g stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M20 20 20 7M20 20l9.2-9.2M20 20h13M20 20l9.2 9.2M20 20v13M20 20l-9.2 9.2M20 20H7M20 20l-9.2-9.2"/></g><circle cx="20" cy="20" r="4.5" fill="#ff5fb4"/></svg>
-      PopAct <span class="by">by たま屋</span>
-    </div>
     <h1>ギフトが、<br>ゲームを動かす。</h1>
-    <p class="lead">TikTok Live のギフト・コメント・いいねで、Minecraft などのゲームの中が動きます。コメントの読み上げと、配信画面の演出もついた、Windows 用の配信ツールです。</p>
+    <p class="lead">TikTok LIVE のギフト・コメント・いいねで、Minecraft・GTA V・R.E.P.O. などのゲームが動きます（GTA V などはゲーム連携プラン）。コメントの読み上げと配信画面の演出もついた、Windows 用の配信ツールです。</p>
+    <!-- ダウンロードは Releases のいちばん新しい版のページへ。zip の名前に版番号が入る（build-package.js の PopAct-<版>.zip）ので、zip へ直接はつながない。
+         たま屋スプリントの版を Releases に出すときは「Latest」にしない（gh release create … --latest=false）。Latest になると、このボタンがゲームの版を開く -->
     <div class="actions">
-      <a class="btn" href="https://github.com/popact/popact.github.io/releases/latest" target="_blank" rel="noopener">
+      <a class="btn" href="https://github.com/popact/popact.github.io/releases/latest" target="_blank" rel="noopener" aria-describedby="dl-note">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11 3h2v10.2l3.6-3.6 1.4 1.4-6 6-6-6 1.4-1.4 3.6 3.6zM4 19h16v2H4z"/></svg>無料版をダウンロード</a>
-      <a href="#pricing">料金を見る</a>
+      <a class="btn ghost" href="#pricing">料金を見る</a>
     </div>
-    <p class="fine">無料版はずっと無料。TikTok には配信者のユーザー名を入れるだけでつながります（ログインは不要）。</p>
+    <p class="fine" id="dl-note"><b>Windows 10 / 11</b>。開いたページの「Assets」から<span class="nw">「PopAct-（版の番号）.zip」</span>を選んでください（Source code ではありません）。</p>
+    <p class="fine">無料版はずっと無料。TikTok には配信者のユーザー名を入れるだけでつながります（ログインは視聴者のメンバーレベルを見張るときだけ）。</p>
   </div>
 
-  <div class="phone" role="img" aria-label="配信画面の見本: ステータスバー、フォロワー目標のバー、ギフトの通知、ギフトが積もる瓶">
+  <div class="stage">
+  <div class="phone" role="img" aria-label="配信画面の見本: ステータスバー、フォロワー目標のバー、ギフトの通知、ギフトで起きることの一覧">
     <div class="screen">
       <div class="w w-status">
         <span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M12 9v4l2.5 2M9 2h6" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>1:23:45</span>
         <span><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#ff5fb4" d="M12 21s-8.6-5.4-8.6-11.4A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 8.6 2.6C20.6 15.6 12 21 12 21z"/></svg>12,480</span>
-        <span><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 3h12v3h3v3a5 5 0 0 1-5 5 5 5 0 0 1-3 2v2h3v3H8v-3h3v-2a5 5 0 0 1-3-2 5 5 0 0 1-5-5V6h3zm0 5H5v1a3 3 0 0 0 1.4 2.5A7 7 0 0 1 6 9zm12 0v1a7 7 0 0 1-.4 2.5A3 3 0 0 0 19 9V8z"/></svg>7<em>/10</em></span>
+        <span><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#ffc93c" d="M6 3h12v3h3v3a5 5 0 0 1-5 5 5 5 0 0 1-3 2v2h3v3H8v-3h3v-2a5 5 0 0 1-3-2 5 5 0 0 1-5-5V6h3zm0 5H5v1a3 3 0 0 0 1.4 2.5A7 7 0 0 1 6 9zm12 0v1a7 7 0 0 1-.4 2.5A3 3 0 0 0 19 9V8z"/></svg>7<em>/10</em></span>
       </div>
       <div class="w w-goal">
         <div class="t">フォロワー目標<span><b>64</b><small> / 100</small></span></div>
@@ -223,22 +337,14 @@
       <div class="al a2"><div class="av" style="box-shadow:0 0 0 2px rgba(255,95,180,.55);color:#fff"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="8.6" width="17" height="4.4" rx="1.2" fill="#ff5fb4"/><rect x="5" y="13" width="14" height="8" rx="1.2" fill="#ff8fca"/><path fill="#fff" d="M12 8.6c-1.6-3.4-5.6-3.6-5.6-1.3 0 1.3 1.9 1.3 5.6 1.3zm0 0c1.6-3.4 5.6-3.6 5.6-1.3 0 1.3-1.9 1.3-5.6 1.3z"/></svg></div><div><b>ずんだもん</b> さんから<div class="l2">バラ ×5<span class="coin"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#ffc93c"/><circle cx="12" cy="12" r="6.5" fill="#f0a818"/></svg>5</span></div></div></div>
       <div class="al a3 big"><div class="av" style="box-shadow:0 0 0 2px rgba(255,201,60,.85)"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#ffc93c" d="M12 2.4l2.9 6.4 7 .8-5.2 4.7 1.4 6.9L12 17.7l-6.1 3.5 1.4-6.9L2.1 9.6l7-.8z"/></svg></div><div><b>たまや</b> さんから<div class="l2">ギャラクシー ×1<span class="coin"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#ffc93c"/><circle cx="12" cy="12" r="6.5" fill="#f0a818"/></svg>1,000</span></div></div></div>
 
-      <div class="jar">
-        <svg viewBox="0 0 124 148" aria-hidden="true">
-          <path d="M10 22 L10 124 Q10 142 28 142 L96 142 Q114 142 114 124 L114 22 Z" fill="rgba(196,228,255,.12)"/>
-          <g>
-            <circle cx="34" cy="124" r="13" fill="#38c9ff"/><circle cx="62" cy="126" r="11" fill="#ff5fb4"/><circle cx="90" cy="123" r="14" fill="#ffc93c"/>
-            <circle cx="46" cy="101" r="12" fill="#3ef0a1"/><circle cx="74" cy="102" r="12" fill="#9b6bff"/><circle cx="97" cy="97" r="9" fill="#ff5fb4"/>
-            <circle cx="27" cy="97" r="9" fill="#ffc93c"/><circle cx="60" cy="79" r="11" fill="#38c9ff"/><circle cx="86" cy="78" r="10" fill="#3ef0a1"/>
-            <circle class="drop" cx="38" cy="78" r="10" fill="#ff5fb4"/>
-          </g>
-          <path d="M10 22 L10 124 Q10 142 28 142 L96 142 Q114 142 114 124 L114 22" fill="none" stroke="rgba(196,228,255,.3)" stroke-width="7" stroke-linejoin="round"/>
-          <path d="M10 22 L10 124 Q10 142 28 142 L96 142 Q114 142 114 124 L114 22" fill="none" stroke="rgba(238,248,255,.75)" stroke-width="1.6" stroke-linejoin="round"/>
-          <path d="M18 40 L18 100" stroke="rgba(255,255,255,.35)" stroke-width="4" stroke-linecap="round"/>
-          <ellipse cx="62" cy="22" rx="52" ry="6" fill="none" stroke="rgba(238,248,255,.8)" stroke-width="2.4"/>
-        </svg>
+      <div class="w w-acts">
+        <div class="t">ギフトで起きること</div>
+        <div class="r">ジャンプ<span class="c"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#ffc93c"/><circle cx="12" cy="12" r="6.5" fill="#f0a818"/></svg>1</span></div>
+        <div class="r">敵を出す<span class="c"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#ffc93c"/><circle cx="12" cy="12" r="6.5" fill="#f0a818"/></svg>30</span></div>
+        <div class="r">停電<span class="c"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#ffc93c"/><circle cx="12" cy="12" r="6.5" fill="#f0a818"/></svg>99</span></div>
       </div>
     </div>
+  </div>
   </div>
 </div>
 </header>
@@ -249,8 +355,8 @@
   <h2>使い始めるまで</h2>
   <p class="lead">3 つの手順で、今日の配信から使えます。</p>
   <div class="steps">
-    <div class="step"><span class="n">1</span><h3>ダウンロードして開く</h3><p>zip を展開して、PopAct.exe を開きます。インストールは要りません。</p></div>
-    <div class="step"><span class="n">2</span><h3>TikTok につなぐ</h3><p>配信者のユーザー名を入れて接続します。ログインやパスワードは要りません。</p></div>
+    <div class="step"><span class="n">1</span><h3>ダウンロードして開く</h3><p>zip を展開して、PopAct.exe を開きます。インストールは要りません。青い画面「Windows によって PC が保護されました」が出たら、「詳細情報」を押してから「実行」を押します。</p></div>
+    <div class="step"><span class="n">2</span><h3>TikTok につなぐ</h3><p>配信者のユーザー名を入れて接続します。パスワードは要りません（視聴者のメンバーレベルを見張るときだけ、アプリの中で TikTok にログインします）。</p></div>
     <div class="step"><span class="n">3</span><h3>ルールを作る・OBS に貼る</h3><p>ギフトで動かすルールを作ったり、ウィジェットの URL を OBS に貼ったりします。テストのボタンで、配信の前に動きを確かめられます。</p></div>
   </div>
 </div>
@@ -280,12 +386,23 @@
       <p>「バラが 5 個届いたらゾンビを 5 体出す」のように、配信で起きたことをきっかけに、ゲームへ命令を送るルールを作れます。</p>
       <ul>
         <li>きっかけ: ギフト（コイン数の範囲も）・コメントの言葉・いいねの数・フォロー・シェア・入室</li>
-        <li>送り先: Minecraft のサーバーへはコマンドを直接（RCON）、GTA V へは Chaos Mod の効果か PopAct の mod の演出（ジャンプ台・襲撃者・車の差し替えなど）を発動し、チリアド登山や監獄などのゲームモードに視聴者が参加、ほかのゲームへはキー入力や HTTP リクエストで</li>
+        <li>送り先:
+          <ul class="games">
+            <li><b>Minecraft</b> サーバーへコマンドを直接送る（RCON）</li>
+            <li><b>GTA V</b> Chaos Mod の効果や、PopAct の MOD の演出（ジャンプ台・襲撃者・車の差し替えなど）を発動。チリアド登山や監獄などのゲームモードに視聴者が参加（ゲーム連携プラン）</li>
+            <li><b>R.E.P.O.</b> 敵・イベント・お助けを出す。配信者の HP・スタミナの回復と、その場でアップグレードも。MOD はボタン 1 つで導入（ゲーム連携プラン）</li>
+            <li><b>Supermarket Simulator</b> お金・客・停電・届け物など 100 種類ほどの効果。名前と残り時間つきの店員や泥棒も呼べる。MOD はボタン 1 つで導入（ゲーム連携プラン）</li>
+            <li><b>ほかのゲーム</b> キー入力や HTTP リクエストで</li>
+          </ul>
+        </li>
+        <li>付属のレースゲーム「たま屋スプリント」: ギフトでバナナ・雷・イカ墨などの妨害や、ダッシュ・スターなどの応援をレースに送れます。PopAct から入れて起動。無料版でも遊べます（ルールは 10 個までなので、効果 11 種類のうち 10 種類まで）</li>
         <li>細かい条件: 対象の人・サブスクやフォロワーなどの属性・クールダウン・1 人あたりの回数</li>
+        <li>同じ出来事に合うルールは、全部が上から順に動きます（同じギフトに 2 つの効果を付けるなど）</li>
+        <li>アクション一覧: ギフトで動かせる効果を配信画面に並べて見せるウィジェット。並び・絵・色・テーマは、見本を見ながらゲーム連携の画面で直せます</li>
       </ul>
       <div class="tiers">
         <div class="tier"><b>無料版</b>ルール 10 個まで。ゲームのプリセットは 1 つ（テンプレートから読み込める）</div>
-        <div class="tier paid"><b>ゲーム連携プラン <em>¥2,090</em>/ 月</b>ルールとプリセットが無制限。GTA V の Chaos Mod（500 種類ほどの効果）をギフトで発動。目標を達成すると、決めた秒数だけコマンドが 2 回ずつ届く「2倍タイム」</div>
+        <div class="tier paid"><b>ゲーム連携プラン<span class="pr"><em>¥2,299</em> / 月（税込）</span></b>ルールとプリセットが無制限。GTA V の Chaos Mod（500 種類ほどの効果）をギフトで発動。R.E.P.O.（Steam のホラー協力ゲーム）にギフトで敵・イベント・お助けを出し、配信者の HP・スタミナの回復やその場でのアップグレードも（MOD はボタン 1 つで導入）。Supermarket Simulator の効果（100 種類ほど）もギフトで発動し、送り主の名前つきの店員や泥棒も呼べる。目標を達成すると、決めた秒数だけコマンドが 2 回ずつ届く「2倍タイム」</div>
       </div>
     </div>
   </div>
@@ -305,7 +422,7 @@
       </ul>
       <div class="tiers">
         <div class="tier"><b>無料版</b>Windows 標準・Edge・Google 翻訳の声</div>
-        <div class="tier paid"><b>読み上げプラン <em>¥630</em>/ 月</b>VOICEVOX（ずんだもんなど）や COEIROINK のキャラクターの声。声を組み合わせた「ボイスセット」で、視聴者ごとに声を変えられる</div>
+        <div class="tier paid"><b>読み上げプラン<span class="pr"><em>¥693</em> / 月（税込）</span></b>VOICEVOX（ずんだもんなど）や COEIROINK のキャラクターの声。声を組み合わせた「ボイスセット」で、視聴者ごとに声を変えられる</div>
       </div>
     </div>
   </div>
@@ -313,17 +430,42 @@
   <div class="feat">
     <div class="demo" aria-hidden="true">
       <div class="tiles">
-        <div class="tile"><svg viewBox="0 0 60 60"><g stroke-linecap="round" stroke-width="3"><path d="M30 30 30 8" stroke="#ff5fb4"/><path d="M30 30 45.6 14.4" stroke="#ffc93c"/><path d="M30 30h22" stroke="#38c9ff"/><path d="M30 30 45.6 45.6" stroke="#ff5fb4"/><path d="M30 30v22" stroke="#ffc93c"/><path d="M30 30 14.4 45.6" stroke="#38c9ff"/><path d="M30 30H8" stroke="#ff5fb4"/><path d="M30 30 14.4 14.4" stroke="#ffc93c"/></g><circle cx="30" cy="30" r="5" fill="#fff"/></svg>花火</div>
-        <div class="tile"><svg viewBox="0 0 60 60"><path d="M12 12v34q0 8 8 8h20q8 0 8-8V12" fill="rgba(196,228,255,.12)" stroke="rgba(238,248,255,.7)" stroke-width="2.4"/><circle cx="22" cy="46" r="6" fill="#38c9ff"/><circle cx="36" cy="46" r="6" fill="#ff5fb4"/><circle cx="29" cy="35" r="6" fill="#ffc93c"/><circle cx="41" cy="34" r="4.5" fill="#3ef0a1"/></svg>ギフトジャー</div>
+        <div class="tile"><svg viewBox="0 0 60 60"><circle cx="30" cy="32" r="21" fill="#38c9ff"/><path d="M30 32 30 11A21 21 0 0 1 48.2 21.5Z" fill="#ff5fb4"/><path d="M30 32 48.2 42.5A21 21 0 0 1 30 53Z" fill="#ffc93c"/><path d="M30 32 11.8 42.5A21 21 0 0 1 11.8 21.5Z" fill="#3ef0a1"/><circle cx="30" cy="32" r="5" fill="#f3efff"/><path d="M24 4h12l-6 9z" fill="#f3efff"/></svg>ルーレット</div>
+        <div class="tile"><svg viewBox="0 0 60 60"><rect x="22" y="26" width="16" height="26" rx="3" fill="rgba(255,201,60,.3)"/><rect x="5" y="34" width="16" height="18" rx="3" fill="rgba(207,214,230,.28)"/><rect x="39" y="39" width="16" height="13" rx="3" fill="rgba(222,140,80,.3)"/><circle cx="30" cy="17" r="6.5" fill="#ffc93c"/><circle cx="13" cy="25" r="5.5" fill="#cfd6e6"/><circle cx="47" cy="30" r="5.5" fill="#de8c50"/></svg>ランキング</div>
         <div class="tile"><svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="20" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="7"/><circle cx="30" cy="30" r="20" fill="none" stroke="#38c9ff" stroke-width="7" stroke-linecap="round" stroke-dasharray="125.7" stroke-dashoffset="45" transform="rotate(-90 30 30)"/><text x="30" y="34" text-anchor="middle" fill="#fff" font-size="11" font-weight="800" font-family="M PLUS Rounded 1c">64%</text></svg>ゴール</div>
       </div>
     </div>
     <div>
       <h3>配信画面を、にぎやかに</h3>
       <p>出したいものの URL を、OBS のブラウザソースか TikTok LIVE Studio の「リンク」のソースに貼るだけです（どちらも同じ URL）。ギフト・フォロー・シェアの通知が配信画面に出て、高額ギフトは特別な演出になります。</p>
+      <ul>
+        <li>視聴者のギフターレベル・メンバーレベルが上がったら、通知・チャット・読み上げでお祝いできる（メンバーレベルは、アプリの中で TikTok にログインしたとき）</li>
+      </ul>
       <div class="tiers">
-        <div class="tier"><b>無料版</b>通知・チャット・ゴール・ランキング・ルーレット・勝敗カウンター・タイマー・時計など（右上に小さなロゴ）</div>
-        <div class="tier paid"><b>ウィジェットプラン <em>¥1,050</em>/ 月</b>ギフトの雨・いいねのハート・花火・ギフトジャー・四季のフレーム・バトルペット（勝つたびに、たまごから 11 段階に進化するドラゴン・スライム・ペンギン勇者）。ポップなテーマ（キャンディ・ステッカー・ネオンポップ）と四季のテーマ（春・夏・秋・冬）。ロゴを外せる</div>
+        <div class="tier"><b>無料版</b>通知・チャット・ゴール・ランキング・ルーレット・勝敗カウンター・タイマー・時計・アクション一覧など。テーマ（キャンディ・ステッカー・ネオンポップ・春・夏・秋・冬）も選べ、右上の小さなロゴも外せる</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="feat">
+    <div class="demo" aria-hidden="true">
+      <div class="tiles">
+        <div class="tile"><svg viewBox="0 0 60 60"><text x="30" y="27" text-anchor="middle" fill="#ffc93c" font-size="15" font-weight="800" font-family="M PLUS Rounded 1c">1.2万</text><text x="30" y="44" text-anchor="middle" fill="#b9b0e0" font-size="9" font-family="M PLUS Rounded 1c">+12%</text></svg>コイン</div>
+        <div class="tile"><svg viewBox="0 0 60 60"><path d="M8 50h44" stroke="rgba(255,255,255,.25)" stroke-width="2"/><g fill="#ff5fb4"><rect x="11" y="36" width="6" height="14" rx="1.5"/><rect x="20" y="26" width="6" height="24" rx="1.5"/><rect x="29" y="31" width="6" height="19" rx="1.5"/><rect x="38" y="16" width="6" height="34" rx="1.5"/></g><rect x="47" y="22" width="4" height="28" rx="1.5" fill="#38c9ff"/></svg>流れ</div>
+        <div class="tile"><svg viewBox="0 0 60 60"><g font-family="M PLUS Rounded 1c" font-size="9" font-weight="800"><circle cx="14" cy="16" r="6" fill="#ffc93c"/><text x="14" y="19" text-anchor="middle" fill="#1a1433">1</text><rect x="24" y="13" width="26" height="6" rx="3" fill="#f3efff"/><circle cx="14" cy="31" r="6" fill="#c9d3e6"/><text x="14" y="34" text-anchor="middle" fill="#1a1433">2</text><rect x="24" y="28" width="20" height="6" rx="3" fill="#f3efff" opacity=".8"/><circle cx="14" cy="46" r="6" fill="#d99a63"/><text x="14" y="49" text-anchor="middle" fill="#1a1433">3</text><rect x="24" y="43" width="15" height="6" rx="3" fill="#f3efff" opacity=".6"/></g></svg>上位</div>
+      </div>
+    </div>
+    <div>
+      <h3>配信を、あとから振り返る</h3>
+      <p>配信が終わるたびに、その配信のギフト・いいね・コメント・フォロー・最大視聴者数と、ゲーム連携のルールが何回動いたかを 1 件ずつ残します。前の配信とくらべて、伸びたところが分かります。</p>
+      <ul>
+        <li>1 分ごとの流れ（コイン・いいね・コメント・視聴者）のグラフ</li>
+        <li>ギフトの種類ごとの数、ギフト・いいね・コメントそれぞれの上位 100 人</li>
+        <li>バトル 1 回ごとの勝ち負け・点数と、その間に届いたギフト・いちばん送ってくれた人</li>
+        <li>リスナーごとの集計は、今日・今週・今月など期間で合計できる。表はそのままスプレッドシートに貼れる</li>
+      </ul>
+      <div class="tiers">
+        <div class="tier"><b>無料版</b>配信レポートとリスナー集計の全部（プランによる違いはありません）</div>
       </div>
     </div>
   </div>
@@ -333,36 +475,50 @@
 <section id="pricing">
 <div class="wrap">
   <h2>料金</h2>
-  <p class="lead">月額です。必要なプランだけ選べて、いつでも解約できます。表示は税別で、購入のときに消費税（10%）が加わります。</p>
-  <div class="soon"><b>準備中</b><span>有料プランの販売は、もうすぐ始まります。それまでは無料版をお使いください。</span></div>
+  <p class="lead">月額です。必要なプランだけ選べて、いつでも解約できます。値段は消費税（10%）込みで、税抜の値段も添えています。</p>
+  <!-- 値段: 税込 = 税抜 × 1.1（今の値段では端数は出ない。出たら切り捨てでそろえる）。もとは plan-features.js の PLAN_PRICES_JPY（税抜） -->
   <div class="tickets">
-    <div class="ticket free"><h3>無料版</h3><div class="yen">¥0</div><p>接続・通知・基本のウィジェット・読み上げ・ルール 10 個</p></div>
-    <div class="ticket"><h3>読み上げ</h3><div class="yen">¥630<small>/ 月</small></div><p>キャラクターの声とボイスセット</p></div>
-    <div class="ticket"><h3>ゲーム連携</h3><div class="yen">¥2,090<small>/ 月</small></div><p>ルールとプリセットが無制限・2倍タイム</p></div>
-    <div class="ticket"><h3>ウィジェット</h3><div class="yen">¥1,050<small>/ 月</small></div><p>演出のウィジェット（ギフトジャーなど）とロゴなし</p></div>
-    <div class="ticket set"><h3>セット</h3><div class="yen">¥3,100<small>/ 月</small></div><p>3 つ全部。別々に買うより ¥670 安い</p></div>
+    <div class="ticket free"><h3>無料版</h3><div class="yen">¥0</div><p class="ex">ずっと無料</p><p>接続・通知・ウィジェットとテーマ・読み上げ・ルール 10 個</p></div>
+    <div class="ticket"><h3>読み上げ</h3><div class="yen">¥693<small>/ 月（税込）</small></div><p class="ex">税抜 ¥630</p><p>キャラクターの声とボイスセット</p></div>
+    <div class="ticket"><h3>ゲーム連携</h3><div class="yen">¥2,299<small>/ 月（税込）</small></div><p class="ex">税抜 ¥2,090</p><p>ルールとプリセットが無制限・GTA V などのゲーム・2倍タイム</p></div>
   </div>
 
-  <div class="table-wrap">
+  <!-- ✔ と — は SVG（下の i-yes / i-no）。読み上げソフトには「あり」「なし」と読ませる -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-yes" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-no" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" d="M7 12h10"/></symbol>
+  </svg>
+  <div class="table-wrap" role="region" aria-labelledby="cmp-cap" tabindex="0">
   <table>
-    <tr><th>くらべる</th><th>無料版</th><th>読み上げ</th><th>ゲーム連携</th><th>ウィジェット</th><th>セット</th></tr>
-    <tr><td>月額（税別）</td><td>¥0</td><td>¥630</td><td>¥2,090</td><td>¥1,050</td><td>¥3,100</td></tr>
-    <tr><td>TikTok Live 接続・ダッシュボード</td><td class="ok">✔</td><td class="ok">✔</td><td class="ok">✔</td><td class="ok">✔</td><td class="ok">✔</td></tr>
-    <tr><td>OBS オーバーレイ・基本のウィジェット（チャット・ゴール・ランキング・ルーレット・勝敗カウンター・タイマーなど）</td><td class="ok">✔</td><td class="ok">✔</td><td class="ok">✔</td><td class="ok">✔</td><td class="ok">✔</td></tr>
-    <tr><td>TikTok LIVE Studio で使う（ウィジェット・通知の公開 URL）</td><td class="ok">✔</td><td class="ok">✔</td><td class="ok">✔</td><td class="ok">✔</td><td class="ok">✔</td></tr>
-    <tr><td>演出のウィジェット（ギフトの雨・ハート・花火・ギフトジャー・四季のフレーム・バトルペット）</td><td class="ng">—</td><td class="ng">—</td><td class="ng">—</td><td class="ok">✔</td><td class="ok">✔</td></tr>
-    <tr><td>ウィジェットのテーマ（キャンディ・ステッカー・ネオンポップ・春・夏・秋・冬）</td><td class="ng">—</td><td class="ng">—</td><td class="ng">—</td><td class="ok">✔</td><td class="ok">✔</td></tr>
-    <tr><td>ウィジェットのロゴ</td><td>右上に小さく表示</td><td>右上に小さく表示</td><td>右上に小さく表示</td><td class="ok">外せる</td><td class="ok">外せる</td></tr>
-    <tr><td>コメント読み上げ</td><td>Windows 標準・Edge・Google 翻訳ボイス</td><td class="ok">✔ ＋ VOICEVOX / COEIROINK などのキャラボイス</td><td>Windows 標準・Edge・Google 翻訳ボイス</td><td>Windows 標準・Edge・Google 翻訳ボイス</td><td class="ok">✔ ＋ VOICEVOX / COEIROINK などのキャラボイス</td></tr>
-    <tr><td>読み上げボイスセット（複数ボイスの切替）</td><td class="ng">—</td><td class="ok">✔</td><td class="ng">—</td><td class="ng">—</td><td class="ok">✔</td></tr>
-    <tr><td>ゲーム連携のルール数</td><td>上から 10 個まで動作</td><td>上から 10 個まで動作</td><td class="ok">無制限</td><td>上から 10 個まで動作</td><td class="ok">無制限</td></tr>
-    <tr><td>ゲームプリセット（ゲームごとの切替）</td><td>1 つ（テンプレートから読み込み可）</td><td>1 つ</td><td class="ok">無制限</td><td>1 つ</td><td class="ok">無制限</td></tr>
-    <tr><td>GTA V 連携（Chaos Mod の効果と PopAct の mod の演出をギフトで発動・ゲームモード 9 種類（ゲームの中の F10 メニューから始める）・送り主の名前を表示）</td><td class="ng">—</td><td class="ng">—</td><td class="ok">✔</td><td class="ng">—</td><td class="ok">✔</td></tr>
-    <tr><td>2倍タイム（目標を達成すると、コマンドを 2 回ずつ送る）</td><td class="ng">—</td><td class="ng">—</td><td class="ok">✔</td><td class="ng">—</td><td class="ok">✔</td></tr>
-    <tr><td>リスナー集計（期間別のギフト・いいね・コメント）</td><td class="ok">✔</td><td class="ok">✔</td><td class="ok">✔</td><td class="ok">✔</td><td class="ok">✔</td></tr>
+    <caption id="cmp-cap" class="vh">プランごとの機能のちがい</caption>
+    <thead>
+      <tr><th scope="col">機能</th><th scope="col">無料版</th><th scope="col">読み上げ</th><th scope="col">ゲーム連携</th></tr>
+    </thead>
+    <tbody>
+      <tr><th scope="row">月額（税込）</th><td class="yen">¥0</td><td class="yen">¥693<small>税抜 ¥630</small></td><td class="yen">¥2,299<small>税抜 ¥2,090</small></td></tr>
+      <tr><th scope="row">TikTok LIVE 接続・ダッシュボード</th><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td></tr>
+      <tr><th scope="row">OBS オーバーレイ・基本のウィジェット<small>チャット・ゴール・ランキング・ルーレット・勝敗カウンター・タイマーなど</small></th><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td></tr>
+      <tr><th scope="row">TikTok LIVE Studio で使う<small>ウィジェット・通知の公開 URL</small></th><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td></tr>
+      <tr><th scope="row">ウィジェットのテーマ<small>キャンディ・ステッカー・ネオンポップ・春・夏・秋・冬</small></th><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td></tr>
+      <tr><th scope="row">ウィジェットのロゴ</th><td class="ok">外せる</td><td class="ok">外せる</td><td class="ok">外せる</td></tr>
+      <tr><th scope="row">コメント読み上げ</th><td>Windows 標準・Edge・Google 翻訳の声</td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span> ＋ VOICEVOX / COEIROINK などのキャラクターの声</td><td>Windows 標準・Edge・Google 翻訳の声</td></tr>
+      <tr><th scope="row">読み上げのボイスセット<small>複数の声の切り替え</small></th><td class="ng"><svg class="mk" aria-hidden="true"><use href="#i-no"/></svg><span class="vh">なし</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ng"><svg class="mk" aria-hidden="true"><use href="#i-no"/></svg><span class="vh">なし</span></td></tr>
+      <tr><th scope="row">ゲーム連携のルール数</th><td>上から 10 個まで動作</td><td>上から 10 個まで動作</td><td class="ok">無制限</td></tr>
+      <tr><th scope="row">ゲームのプリセット<small>ゲームごとの切り替え</small></th><td>1 つ（テンプレートから読み込み可）</td><td>1 つ</td><td class="ok">無制限</td></tr>
+      <tr><th scope="row">たま屋スプリント<small>PopAct 付属のレースゲーム。PopAct から入れて起動。ルール 10 個までのプランでは、効果 11 種類のうち 10 種類まで</small></th><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td></tr>
+      <tr><th scope="row">GTA V 連携<small>Chaos Mod の効果と PopAct の MOD の演出をギフトで発動・ゲームモード 9 種類（ゲームの中の F10 メニューから始める）・送り主の名前を表示</small></th><td class="ng"><svg class="mk" aria-hidden="true"><use href="#i-no"/></svg><span class="vh">なし</span></td><td class="ng"><svg class="mk" aria-hidden="true"><use href="#i-no"/></svg><span class="vh">なし</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td></tr>
+      <tr><th scope="row">R.E.P.O. 連携<small>ギフトで敵・イベント・お助けを出す。HP・スタミナの回復とその場のアップグレード。MOD はボタン 1 つで導入</small></th><td class="ng"><svg class="mk" aria-hidden="true"><use href="#i-no"/></svg><span class="vh">なし</span></td><td class="ng"><svg class="mk" aria-hidden="true"><use href="#i-no"/></svg><span class="vh">なし</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td></tr>
+      <tr><th scope="row">Supermarket Simulator 連携<small>お金・客・停電・届け物・値段など 100 種類ほどの効果をギフトで発動・客や店員・泥棒の頭の上に送り主の名前。MOD はボタン 1 つで導入</small></th><td class="ng"><svg class="mk" aria-hidden="true"><use href="#i-no"/></svg><span class="vh">なし</span></td><td class="ng"><svg class="mk" aria-hidden="true"><use href="#i-no"/></svg><span class="vh">なし</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td></tr>
+      <tr><th scope="row">2倍タイム<small>目標を達成すると、コマンドを 2 回ずつ送る</small></th><td class="ng"><svg class="mk" aria-hidden="true"><use href="#i-no"/></svg><span class="vh">なし</span></td><td class="ng"><svg class="mk" aria-hidden="true"><use href="#i-no"/></svg><span class="vh">なし</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td></tr>
+      <tr><th scope="row">アクション一覧のウィジェット<small>ギフトで動かせる効果を配信画面に並べる</small></th><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td></tr>
+      <tr><th scope="row">視聴者のレベルアップの知らせ<small>ギフターレベル・メンバーレベル（メンバーレベルは TikTok へのログインが要る）</small></th><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td></tr>
+      <tr><th scope="row">リスナー集計<small>期間別のギフト・いいね・コメント</small></th><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td></tr>
+      <tr><th scope="row">配信レポート<small>配信ごとのギフト・いいね・コメント・ゲーム連携の回数と流れ</small></th><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td></tr>
+      <tr><th scope="row">アプリからの問い合わせ<small>ログ・スクリーンショット・録画を添えて送れる。返事はアプリに届く</small></th><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td></tr>
+    </tbody>
   </table>
   </div>
-  <p class="note">購入で発行されるライセンスキーを、コンソールの「ライセンス」タブに入力すると、そのプランの機能が使えるようになります。決済は Lemon Squeezy（会員登録不要・クレジットカード）で行われ、解約はいつでもできます。</p>
+  <p class="note">購入で発行されるライセンスキーを、コンソールの「ライセンス」タブに入力すると、そのプランの機能が使えるようになります。決済は Stripe（会員登録不要・クレジットカード）で行われ、解約はいつでもできます（コンソールの「ライセンス」タブの「契約の確認・解約」から）。読み上げとゲーム連携は両方を買うこともでき、同じキーに足されます。くわしくは<a href="tokushoho.html">特定商取引法に基づく表記</a>をご覧ください。</p>
 </div>
 </section>
 
@@ -374,25 +530,29 @@
       <h3>動作環境</h3>
       <dl class="spec">
         <dt>パソコン</dt><dd>Windows 10 / 11</dd>
-        <dt>TikTok</dt><dd>TikTok Live の配信者アカウント（ギフト連携には LIVE 権限が必要）</dd>
+        <dt>TikTok</dt><dd>TikTok LIVE の配信者アカウント（ギフト連携には LIVE 権限が必要）</dd>
         <dt>Minecraft 連携</dt><dd>Java 版サーバー（Paper など）。アプリから起動すれば RCON は自動で設定</dd>
         <dt>読み上げ・オーバーレイ</dt><dd>ネットワーク接続だけで動きます</dd>
       </dl>
     </div>
     <div>
       <h3>よくある質問</h3>
+      <details><summary>開こうとしたら「Windows によって PC が保護されました」と出ました</summary>
+        <p>新しいアプリを開くと、Windows の SmartScreen がこの青い画面を出すことがあります。「詳細情報」を押し、出てきた「実行」を押すと開けます。</p></details>
       <details><summary>TikTok のパスワードは必要ですか？</summary>
-        <p>いいえ。配信者のユーザー名だけでつながります。TikTok のアカウントにログインすることはありません。</p></details>
+        <p>ふだんは要りません。配信者のユーザー名だけでつながります。視聴者のメンバーレベルが上がったことに気づく「レベルの見張り」を使うときだけ、アプリの中の TikTok のページでログインします。ログインの情報はパソコンの中だけに残り、PopAct が読むことはありません。</p></details>
       <details><summary>TikTok や Minecraft の公式ツールですか？</summary>
-        <p>いいえ。個人開発の非公式ツールで、TikTok・Mojang・Microsoft とは関係ありません。TikTok Live への接続はコミュニティで広く使われている方式を採用していますが、TikTok 側の仕様変更により一時的に接続できなくなる可能性があります。その際はアップデートで対応します。</p></details>
+        <p>いいえ。個人開発の非公式ツールで、TikTok・Mojang・Microsoft とは関係ありません。TikTok LIVE への接続はコミュニティで広く使われている方式を採用していますが、TikTok 側の仕様変更により一時的に接続できなくなる可能性があります。その際はアップデートで対応します。</p></details>
       <details><summary>TikTok LIVE Studio でも使えますか？</summary>
         <p>はい。ウィジェットと通知の URL は、開発者の中継サーバーを通した公開 URL なので、OBS のブラウザソースにも、LIVE Studio の「リンク」のソースにも、同じ URL を貼れます。無料版でも使えます。</p></details>
       <details><summary>解約したらどうなりますか？</summary>
         <p>ライセンスキーが失効し、無料版の機能範囲に戻ります。作成したルールやプリセットの設定データは消えません。</p></details>
       <details><summary>ライセンスは何台まで使えますか？</summary>
-        <p>ご自身の配信用 PC を想定して複数台のアクティベーションに対応しています（台数上限は購入ページに記載）。1 つのライセンスは 1 つの TikTok アカウントで使えます（有料プランで初めてつないだアカウントに結びつきます）。別のアカウントへの付け替えは 30 日に 1 回までです。</p></details>
+        <p>台数の上限はありません。1 つのライセンスは 1 つの TikTok アカウントに結びつきます（有料プランで初めてつないだアカウント）。別のアカウントへの付け替えは 30 日に 1 回までです。</p></details>
       <details><summary>返金はできますか？</summary>
-        <p>決済プラットフォーム（Lemon Squeezy）のポリシーに準じます。まず無料版で動作確認いただくことをおすすめします。</p></details>
+        <p>返金のご相談は、下の「連絡先」へお問い合わせください。PopAct のヘッダーの「お問い合わせ」からも送れます。購入の前に、まず無料版で動作をお確かめください。</p></details>
+      <details><summary>ライセンスキーをなくしました</summary>
+        <p>アプリのライセンスのタブの「キーを表示」で確かめられます。アプリでも分からないときは、購入のときのメールアドレスを添えて、下の「連絡先」へお問い合わせください。PopAct のヘッダーの「お問い合わせ」からも送れます。</p></details>
     </div>
   </div>
 </div>
@@ -402,9 +562,10 @@
   <h2>まずは無料版から</h2>
   <p class="lead">ずっと無料で使えます。足りなくなったら、その分野のプランを足してください。</p>
   <div class="actions">
-      <a class="btn" href="https://github.com/popact/popact.github.io/releases/latest" target="_blank" rel="noopener">
+      <a class="btn" href="https://github.com/popact/popact.github.io/releases/latest" target="_blank" rel="noopener" aria-describedby="dl-note2">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11 3h2v10.2l3.6-3.6 1.4 1.4-6 6-6-6 1.4-1.4 3.6 3.6zM4 19h16v2H4z"/></svg>無料版をダウンロード</a>
   </div>
+  <p class="fine" id="dl-note2"><b>Windows 10 / 11</b>。開いたページの「Assets」から<span class="nw">「PopAct-（版の番号）.zip」</span>を選んでください。</p>
 </div>
 </section>
 </main>
@@ -416,15 +577,22 @@
       <h2>利用規約（要約）</h2>
       <p>本ソフトウェアは現状有姿で提供され、TikTok・Minecraft 等の外部サービスの仕様変更による機能停止について開発者は責任を負いません。
       ライセンスキーの共有・再配布・リバースエンジニアリングは禁止です。配信での利用はご自身のアカウント・コンテンツポリシーの範囲で行ってください。</p>
+      <p class="more"><a href="terms.html">利用規約の全文</a></p>
     </div>
     <div>
       <h2>プライバシーポリシー（要約）</h2>
       <p>本ソフトウェアは利用者の PC 上で動作します。ウィジェットと通知を OBS や LIVE Studio に表示するため、それらに出すもの（視聴者の名前・コメント・ギフトなどの出来事、集計、ウィジェットの設定、アップロードした音・画像）を、開発者の中継サーバー（Cloudflare）を通して配信画面に届けます。中継サーバーには表示に必要な分だけを保存し、それ以外の目的には使いません。RCON のパスワードやライセンスキーなどの設定は送信しません。
-      ライセンス認証のためキー情報のみが決済プラットフォーム（Lemon Squeezy）に送信されます。</p>
+      ライセンスの確認のため、ライセンスキーそのものではなく、キーから作った識別用の値（ハッシュ）と、キーを結びつける TikTok のユーザー名を中継サーバーに送り、中継サーバーが決済プラットフォーム（Stripe）に契約の状態を問い合わせます。
+      付属のゲーム「たま屋スプリント」の最新の版を確かめるときと入れるときは、GitHub（popact.github.io と Releases）から版の情報と配布ファイルを取ってきます（こちらから送る情報はありません）。
+      PopAct のヘッダーの「お問い合わせ」から送ったときは、書いた本文と、版・プランなどの動作環境（見てから送れます）を中継サーバーに送り、返事と調査のためだけに使って、最後のやり取りから 90 日で消します。ログや画像・動画を付けるか、メールでも返事をもらうかは、送る人が選びます。
+      このページは文字の表示に Google Fonts を読み込んでいるため、開くと Google のサーバーに接続元の IP アドレスなどが届きます。</p>
+      <p class="more"><a href="privacy.html">プライバシーポリシーの全文</a></p>
     </div>
     <div>
       <h2>連絡先</h2>
       <p>TikTok: <a href="https://www.tiktok.com/@ta__maya____" target="_blank" rel="noopener">@ta__maya____</a>（開発者の配信も見られます）</p>
+      <p>PopAct のヘッダーの「お問い合わせ」からも送れます（返事はアプリに届きます）。</p>
+      <p class="more">販売者と問い合わせ先: <a href="tokushoho.html">特定商取引法に基づく表記</a></p>
     </div>
     <div>
       <h2>商標について</h2>
@@ -432,9 +600,35 @@
       Minecraft は Mojang Synergies AB の商標です。TikTok は ByteDance Ltd. の商標です。本ソフトウェアはこれらの企業とは関係ありません。</p>
     </div>
   </div>
-  <p style="margin-top:28px">© 2026 PopAct by たま屋</p>
+  <nav class="legal" aria-label="規約">
+    <ul>
+      <li><a href="tokushoho.html">特定商取引法に基づく表記</a></li>
+      <li><a href="terms.html">利用規約</a></li>
+      <li><a href="privacy.html">プライバシーポリシー</a></li>
+    </ul>
+  </nav>
+  <p class="copy">© 2026 PopAct by たま屋</p>
 </div>
 </footer>
 
+<script>
+  // できることの絵（.demo）が画面に入ったときに、中の部品を順に出す（1 回だけ）。
+  // 「ギフト → 矢印 → ゲームの出来事」の順に出るので、何が何を起こすかが分かる。動きを減らす設定では何もしない（初めから全部出ている）
+  (() => {
+    if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const demos = document.querySelectorAll('.demo');
+    demos.forEach(d => d.querySelectorAll('.rule > *, code, .say, .tile').forEach((el, i) => {
+      el.dataset.i = i;
+      el.style.setProperty('--i', i);
+    }));
+    document.documentElement.classList.add('rv');
+    const io = new IntersectionObserver(entries => entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    }), { rootMargin: '0px 0px -15% 0px' });
+    demos.forEach(d => io.observe(d));
+  })();
+</script>
 </body>
 </html>
