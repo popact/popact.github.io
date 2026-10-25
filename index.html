@@ -209,7 +209,7 @@
   .ticket { border-radius: var(--r-md); background: var(--mist); padding: 24px 20px; display: flex; flex-direction: column; gap: 6px; }
   .ticket h3 { font-size: 17px; }
   .ticket .yen { margin-top: 6px; font-size: clamp(30px, 2.7vw, 38px); font-weight: 800; color: var(--gold); line-height: 1.1; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
-  /* 「/ 月（税込）」は札の幅が狭いと折れるので、いつも値段の下の行に置く */
+  /* 「/ 月」は札の幅が狭いと折れるので、いつも値段の下の行に置く */
   .ticket .yen small { display: block; margin-top: 6px; font-size: 14px; line-height: 1.3; letter-spacing: 0; color: var(--smoke); font-weight: 700; }
   .ticket p { font-size: 14px; color: var(--smoke); line-height: 1.75; }
   .ticket p.ex { margin-top: -2px; font-size: 13px; font-variant-numeric: tabular-nums; }
@@ -402,7 +402,7 @@
       </ul>
       <div class="tiers">
         <div class="tier"><b>無料版</b>ルール 10 個まで。ゲームのプリセットは 1 つ（テンプレートから読み込める）</div>
-        <div class="tier paid"><b>ゲーム連携プラン<span class="pr"><em>¥2,299</em> / 月（税込）</span></b>ルールとプリセットが無制限。GTA V の Chaos Mod（500 種類ほどの効果）をギフトで発動。R.E.P.O.（Steam のホラー協力ゲーム）にギフトで敵・イベント・お助けを出し、配信者の HP・スタミナの回復やその場でのアップグレードも（MOD はボタン 1 つで導入）。Supermarket Simulator の効果（100 種類ほど）もギフトで発動し、送り主の名前つきの店員や泥棒も呼べる。目標を達成すると、決めた秒数だけコマンドが 2 回ずつ届く「2倍タイム」</div>
+        <div class="tier paid"><b>ゲーム連携プラン<span class="pr"><em>¥2,299</em> / 月</span></b>ルールとプリセットが無制限。GTA V の Chaos Mod（500 種類ほどの効果）をギフトで発動。R.E.P.O.（Steam のホラー協力ゲーム）にギフトで敵・イベント・お助けを出し、配信者の HP・スタミナの回復やその場でのアップグレードも（MOD はボタン 1 つで導入）。Supermarket Simulator の効果（100 種類ほど）もギフトで発動し、送り主の名前つきの店員や泥棒も呼べる。目標を達成すると、決めた秒数だけコマンドが 2 回ずつ届く「2倍タイム」</div>
       </div>
     </div>
   </div>
@@ -422,7 +422,7 @@
       </ul>
       <div class="tiers">
         <div class="tier"><b>無料版</b>Windows 標準・Edge・Google 翻訳の声</div>
-        <div class="tier paid"><b>読み上げプラン<span class="pr"><em>¥693</em> / 月（税込）</span></b>VOICEVOX（ずんだもんなど）や COEIROINK のキャラクターの声。声を組み合わせた「ボイスセット」で、視聴者ごとに声を変えられる</div>
+        <div class="tier paid"><b>読み上げプラン<span class="pr"><em>¥693</em> / 月</span></b>VOICEVOX（ずんだもんなど）や COEIROINK のキャラクターの声。声を組み合わせた「ボイスセット」で、視聴者ごとに声を変えられる</div>
       </div>
     </div>
   </div>
@@ -475,12 +475,12 @@
 <section id="pricing">
 <div class="wrap">
   <h2>料金</h2>
-  <p class="lead">月額です。必要なプランだけ選べて、いつでも解約できます。値段は消費税（10%）込みで、税抜の値段も添えています。</p>
-  <!-- 値段: 税込 = 税抜 × 1.1（今の値段では端数は出ない。出たら切り捨てでそろえる）。もとは plan-features.js の PLAN_PRICES_JPY（税抜） -->
+  <p class="lead">月額です。必要なプランだけ選べて、いつでも解約できます。表示の金額が、お支払いの合計です。</p>
+  <!-- 値段はお支払いの合計（「税込」「税抜」とは書かない。訳は CLAUDE.md の「プランと鍵」）。もとは plan-features.js の PLAN_PRICES_JPY -->
   <div class="tickets">
     <div class="ticket free"><h3>無料版</h3><div class="yen">¥0</div><p class="ex">ずっと無料</p><p>接続・通知・ウィジェットとテーマ・読み上げ・ルール 10 個</p></div>
-    <div class="ticket"><h3>読み上げ</h3><div class="yen">¥693<small>/ 月（税込）</small></div><p class="ex">税抜 ¥630</p><p>キャラクターの声とボイスセット</p></div>
-    <div class="ticket"><h3>ゲーム連携</h3><div class="yen">¥2,299<small>/ 月（税込）</small></div><p class="ex">税抜 ¥2,090</p><p>ルールとプリセットが無制限・GTA V などのゲーム・2倍タイム</p></div>
+    <div class="ticket"><h3>読み上げ</h3><div class="yen">¥693<small>/ 月</small></div><p class="ex">毎月の自動更新</p><p>キャラクターの声とボイスセット</p></div>
+    <div class="ticket"><h3>ゲーム連携</h3><div class="yen">¥2,299<small>/ 月</small></div><p class="ex">毎月の自動更新</p><p>ルールとプリセットが無制限・GTA V などのゲーム・2倍タイム</p></div>
   </div>
 
   <!-- ✔ と — は SVG（下の i-yes / i-no）。読み上げソフトには「あり」「なし」と読ませる -->
@@ -495,7 +495,7 @@
       <tr><th scope="col">機能</th><th scope="col">無料版</th><th scope="col">読み上げ</th><th scope="col">ゲーム連携</th></tr>
     </thead>
     <tbody>
-      <tr><th scope="row">月額（税込）</th><td class="yen">¥0</td><td class="yen">¥693<small>税抜 ¥630</small></td><td class="yen">¥2,299<small>税抜 ¥2,090</small></td></tr>
+      <tr><th scope="row">月額</th><td class="yen">¥0</td><td class="yen">¥693</td><td class="yen">¥2,299</td></tr>
       <tr><th scope="row">TikTok LIVE 接続・ダッシュボード</th><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td></tr>
       <tr><th scope="row">OBS オーバーレイ・基本のウィジェット<small>チャット・ゴール・ランキング・ルーレット・勝敗カウンター・タイマーなど</small></th><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td></tr>
       <tr><th scope="row">TikTok LIVE Studio で使う<small>ウィジェット・通知の公開 URL</small></th><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td><td class="ok"><svg class="mk" aria-hidden="true"><use href="#i-yes"/></svg><span class="vh">あり</span></td></tr>
