@@ -11,6 +11,12 @@
       "url": "https://github.com/popact/popact.github.io/releases/download/popactmarket-v1.1.0/PopActMarket-1.1.0.zip",
       "sha256": "a7790bf09f6b0df9f635397d59ae77ee29bc993ee9bf8dcf3ff9645fa1edd054",
       "size": 69212
+    },
+    "popactrepo": {
+      "version": "0.1.0",
+      "url": "https://github.com/popact/popact.github.io/releases/download/popactrepo-v0.1.0/PopActREPO-0.1.0.zip",
+      "sha256": "16bd3844a49042f95aa2161a4a8c4573fe27b9864398d52d538cfcdbfe6911c7",
+      "size": 22286
     }
   }
 }
