@@ -1,10 +1,10 @@
 {
   "mods": {
     "popactgta": {
-      "version": "0.5.3",
-      "url": "https://github.com/popact/popact.github.io/releases/download/popactgta-v0.5.3/PopActGTA-0.5.3.zip",
-      "sha256": "94aa7f0dc018eaec380a829c7ac9e49b0e4394409fee339224fd671a149749ca",
-      "size": 98450
+      "version": "0.5.4",
+      "url": "https://github.com/popact/popact.github.io/releases/download/popactgta-v0.5.4/PopActGTA-0.5.4.zip",
+      "sha256": "0515054e7bcf2f7879e867d4d758c75a57785cccbb392633eee1dc49b00df4f5",
+      "size": 99546
     },
     "popactmarket": {
       "version": "1.1.0",
