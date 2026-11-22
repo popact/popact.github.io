@@ -13,10 +13,10 @@
       "size": 69212
     },
     "popactrepo": {
-      "version": "0.6.0",
-      "url": "https://github.com/popact/popact.github.io/releases/download/popactrepo-v0.6.0/PopActREPO-0.6.0.zip",
-      "sha256": "d9fc26b964cf352c40a2c6fe3cb889e6d8eb89568fbb7e55eea808befafe84d3",
-      "size": 46441
+      "version": "0.7.0",
+      "url": "https://github.com/popact/popact.github.io/releases/download/popactrepo-v0.7.0/PopActREPO-0.7.0.zip",
+      "sha256": "d76c6d76ee4b0b45829d49b679ab586fd58bdeeb0edd730e127a300086352d17",
+      "size": 54587
     }
   }
 }
