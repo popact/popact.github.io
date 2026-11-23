@@ -1,0 +1,315 @@
+{
+  "schema": 1,
+  "mod": "popactgta",
+  "modVersion": "0.5.4",
+  "groups": [
+    {
+      "key": "mode_cmd",
+      "label": "ゲームモード中のコマンド"
+    },
+    {
+      "key": "player",
+      "label": "プレイヤー"
+    },
+    {
+      "key": "wanted",
+      "label": "手配度"
+    },
+    {
+      "key": "weapon",
+      "label": "武器"
+    },
+    {
+      "key": "tp",
+      "label": "テレポート"
+    },
+    {
+      "key": "myveh",
+      "label": "自分の車"
+    },
+    {
+      "key": "vehs",
+      "label": "まわりの車"
+    },
+    {
+      "key": "allveh",
+      "label": "全ての車"
+    },
+    {
+      "key": "peds",
+      "label": "まわりの人"
+    },
+    {
+      "key": "spawnped",
+      "label": "人・動物を出す"
+    },
+    {
+      "key": "spawn",
+      "label": "車・物を出す"
+    },
+    {
+      "key": "world",
+      "label": "世界・重力"
+    },
+    {
+      "key": "weather",
+      "label": "天気・時間"
+    },
+    {
+      "key": "screen",
+      "label": "画面"
+    },
+    {
+      "key": "sound",
+      "label": "音"
+    },
+    {
+      "key": "misc",
+      "label": "その他"
+    },
+    {
+      "key": "meta",
+      "label": "メタ（ほかの効果に効く）"
+    }
+  ],
+  "effects": [
+    {
+      "id": "chiliad_change_timer",
+      "name": "チリアド: 時間を増減（:+30 / :-30）",
+      "group": "mode_cmd",
+      "param": "+30",
+      "paramSpec": {
+        "label": "秒数",
+        "hint": "− で減らす",
+        "kind": "int",
+        "min": -600,
+        "max": 600,
+        "nonzero": true
+      }
+    },
+    {
+      "id": "jail_add_time",
+      "name": "監獄: 刑期を増やす（:秒）",
+      "group": "mode_cmd",
+      "param": "30",
+      "paramSpec": {
+        "label": "秒数",
+        "kind": "int",
+        "min": 1,
+        "max": 600
+      }
+    },
+    {
+      "id": "jail_reduce_time",
+      "name": "監獄: 刑期を減らす（:秒）",
+      "group": "mode_cmd",
+      "param": "30",
+      "paramSpec": {
+        "label": "秒数",
+        "kind": "int",
+        "min": 1,
+        "max": 600
+      }
+    },
+    {
+      "id": "arena_explode_tile",
+      "name": "アリーナ: 床を爆破",
+      "group": "mode_cmd"
+    },
+    {
+      "id": "arena_steal_tile",
+      "name": "アリーナ: 床を盗む",
+      "group": "mode_cmd"
+    },
+    {
+      "id": "arena_tremors",
+      "name": "アリーナ: 地震",
+      "group": "mode_cmd"
+    },
+    {
+      "id": "arena_spleef",
+      "name": "アリーナ: 床をまとめて落とす",
+      "group": "mode_cmd"
+    },
+    {
+      "id": "spawn_arena_fighter",
+      "name": "アリーナの闘士",
+      "group": "spawnped"
+    },
+    {
+      "id": "speedbomb_bonus",
+      "name": "スピードボム: ボーナス",
+      "group": "mode_cmd"
+    },
+    {
+      "id": "parkour_add_life",
+      "name": "スカイパルクール: 残機 +1",
+      "group": "mode_cmd"
+    },
+    {
+      "id": "taxi_add_time",
+      "name": "タクシー: 時間を増やす（:秒）",
+      "group": "mode_cmd",
+      "param": "20",
+      "paramSpec": {
+        "label": "秒数",
+        "kind": "int",
+        "min": 1,
+        "max": 600
+      }
+    },
+    {
+      "id": "megaramp_roll",
+      "name": "メガランプ: 車を転がす（:乗り物）",
+      "group": "mode_cmd",
+      "param": "any",
+      "paramSpec": {
+        "label": "乗り物",
+        "kind": "choice",
+        "dynamic": true,
+        "items": "vehicles"
+      }
+    },
+    {
+      "id": "ramp",
+      "name": "ジャンプ台",
+      "group": "spawn"
+    },
+    {
+      "id": "nitro",
+      "name": "急加速",
+      "group": "myveh"
+    },
+    {
+      "id": "poodle",
+      "name": "プードルに変身",
+      "group": "player"
+    },
+    {
+      "id": "heal",
+      "name": "回復",
+      "group": "player"
+    },
+    {
+      "id": "attackers",
+      "name": "襲撃者",
+      "group": "spawnped"
+    },
+    {
+      "id": "shooters",
+      "name": "撃ってくる襲撃者",
+      "group": "spawnped"
+    },
+    {
+      "id": "attackers_start_shooting",
+      "name": "襲撃者が撃ち始める",
+      "group": "spawnped"
+    },
+    {
+      "id": "angry_animal",
+      "name": "怒った動物",
+      "group": "spawnped"
+    },
+    {
+      "id": "swap_vehicle",
+      "name": "乗り物に乗り換える",
+      "group": "myveh",
+      "param": "any",
+      "paramSpec": {
+        "label": "乗り物",
+        "kind": "choice",
+        "dynamic": true,
+        "items": "vehicles"
+      }
+    },
+    {
+      "id": "spawn_vehicle",
+      "name": "乗り物を出す",
+      "group": "spawn",
+      "param": "any",
+      "paramSpec": {
+        "label": "乗り物",
+        "kind": "choice",
+        "dynamic": true,
+        "items": "vehicles"
+      }
+    },
+    {
+      "id": "swap_bike",
+      "name": "バイクに差し替え",
+      "group": "myveh",
+      "hidden": true
+    },
+    {
+      "id": "replace_helicopter",
+      "name": "ヘリに差し替え",
+      "group": "myveh",
+      "hidden": true
+    },
+    {
+      "id": "spawn_random_bike",
+      "name": "バイクを出す",
+      "group": "spawn",
+      "hidden": true
+    },
+    {
+      "id": "drunk",
+      "name": "酔っ払い",
+      "group": "player"
+    },
+    {
+      "id": "immortality",
+      "name": "無敵",
+      "group": "player"
+    },
+    {
+      "id": "give_weapon",
+      "name": "武器をもらう",
+      "group": "weapon",
+      "param": "any",
+      "paramSpec": {
+        "label": "武器",
+        "kind": "choice",
+        "dynamic": true,
+        "items": "weapons"
+      }
+    },
+    {
+      "id": "random_weapon",
+      "name": "ランダムな武器",
+      "group": "weapon",
+      "hidden": true
+    },
+    {
+      "id": "rpg",
+      "name": "RPG",
+      "group": "weapon",
+      "hidden": true
+    },
+    {
+      "id": "brake_wheels",
+      "name": "タイヤを全部パンク",
+      "group": "myveh"
+    },
+    {
+      "id": "fan_rabbits",
+      "name": "ファンのウサギ",
+      "group": "spawn"
+    },
+    {
+      "id": "black_hole",
+      "name": "ブラックホール",
+      "group": "world"
+    },
+    {
+      "id": "meteor_shower",
+      "name": "隕石の雨",
+      "group": "world"
+    },
+    {
+      "id": "explode_vehicles",
+      "name": "まわりの車を爆発",
+      "group": "vehs"
+    }
+  ]
+}
