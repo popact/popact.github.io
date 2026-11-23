@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "mod": "popactrepo",
-  "modVersion": "0.7.1",
+  "modVersion": "0.8.0",
   "groups": [
     {
       "key": "enemy",
