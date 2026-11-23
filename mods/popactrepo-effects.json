@@ -1,0 +1,252 @@
+{
+  "schema": 1,
+  "mod": "popactrepo",
+  "modVersion": "0.7.1",
+  "groups": [
+    {
+      "key": "enemy",
+      "label": "敵"
+    },
+    {
+      "key": "event",
+      "label": "イベント"
+    },
+    {
+      "key": "boon",
+      "label": "お助け"
+    },
+    {
+      "key": "other",
+      "label": "そのほか"
+    }
+  ],
+  "effects": [
+    {
+      "id": "popact_enemy_swap",
+      "name": "Swap Enemies",
+      "ja": "敵を入れ替える",
+      "group": "event",
+      "paramSpec": {
+        "label": "入れ替え方",
+        "kind": "choice",
+        "options": [
+          {
+            "value": "",
+            "label": "ランダム"
+          },
+          {
+            "value": "stronger",
+            "label": "強くする"
+          },
+          {
+            "value": "weaker",
+            "label": "弱くする"
+          }
+        ]
+      }
+    },
+    {
+      "id": "popact_push_forward",
+      "name": "Push Forward",
+      "ja": "前に押す",
+      "group": "event",
+      "paramSpec": {
+        "label": "強さ",
+        "kind": "choice",
+        "options": [
+          {
+            "value": "",
+            "label": "ふつう"
+          },
+          {
+            "value": "weak",
+            "label": "弱い"
+          },
+          {
+            "value": "strong",
+            "label": "強い"
+          }
+        ]
+      }
+    },
+    {
+      "id": "popact_push_back",
+      "name": "Push Back",
+      "ja": "後ろに押す",
+      "group": "event",
+      "paramSpec": {
+        "label": "強さ",
+        "kind": "choice",
+        "options": [
+          {
+            "value": "",
+            "label": "ふつう"
+          },
+          {
+            "value": "weak",
+            "label": "弱い"
+          },
+          {
+            "value": "strong",
+            "label": "強い"
+          }
+        ]
+      }
+    },
+    {
+      "id": "popact_tumble",
+      "name": "Tumble",
+      "ja": "転ばせる",
+      "group": "event",
+      "paramSpec": {
+        "label": "転んでいる秒数",
+        "hint": "転んだまま起き上がれない秒数（1〜10）。空なら 3 秒",
+        "kind": "int",
+        "min": 1,
+        "max": 10,
+        "blank": "3 秒"
+      }
+    },
+    {
+      "id": "popact_cart_away",
+      "name": "Send Cart Away",
+      "ja": "カートをどこかへ飛ばす",
+      "group": "event"
+    },
+    {
+      "id": "popact_kill",
+      "name": "Kill Player",
+      "ja": "プレイヤーを倒す",
+      "group": "event"
+    },
+    {
+      "id": "popact_heal",
+      "name": "Heal HP",
+      "ja": "HP 回復",
+      "group": "boon",
+      "param": "25",
+      "paramSpec": {
+        "label": "回復量",
+        "hint": "回復する HP。空なら満タン",
+        "kind": "int",
+        "min": 1,
+        "max": 999,
+        "blank": "満タン"
+      }
+    },
+    {
+      "id": "popact_stamina",
+      "name": "Restore Stamina",
+      "ja": "スタミナ回復",
+      "group": "boon",
+      "paramSpec": {
+        "label": "回復量",
+        "hint": "回復するスタミナ。空なら満タン",
+        "kind": "int",
+        "min": 1,
+        "max": 999,
+        "blank": "満タン"
+      }
+    },
+    {
+      "id": "popact_upgrade",
+      "name": "Instant Upgrade",
+      "ja": "アップグレード（その場で付く）",
+      "group": "boon",
+      "paramSpec": {
+        "label": "種類",
+        "kind": "choice",
+        "options": [
+          {
+            "value": "",
+            "label": "ランダム"
+          },
+          {
+            "value": "health",
+            "label": "HP"
+          },
+          {
+            "value": "stamina",
+            "label": "スタミナ"
+          },
+          {
+            "value": "jump",
+            "label": "追加ジャンプ"
+          },
+          {
+            "value": "speed",
+            "label": "走る速さ"
+          },
+          {
+            "value": "crouchrest",
+            "label": "しゃがみ回復"
+          },
+          {
+            "value": "strength",
+            "label": "つかむ力"
+          },
+          {
+            "value": "throw",
+            "label": "投げる力"
+          },
+          {
+            "value": "range",
+            "label": "つかむ距離"
+          },
+          {
+            "value": "mapplayers",
+            "label": "地図の人数"
+          },
+          {
+            "value": "launch",
+            "label": "転がりの勢い"
+          },
+          {
+            "value": "climb",
+            "label": "転がりで登る"
+          },
+          {
+            "value": "wings",
+            "label": "転がりの翼"
+          },
+          {
+            "value": "deathbattery",
+            "label": "死んだあとの頭の電池"
+          }
+        ]
+      }
+    },
+    {
+      "id": "popact_revive",
+      "name": "Extra Life",
+      "ja": "蘇生（残機）",
+      "group": "boon"
+    },
+    {
+      "id": "popact_enemy_count",
+      "name": "Enemy Count",
+      "ja": "敵の数を知らせる",
+      "group": "boon",
+      "paramSpec": {
+        "label": "出す秒数",
+        "hint": "「敵 N 体」を画面に出す秒数（3〜15）。空なら 5 秒",
+        "kind": "int",
+        "min": 3,
+        "max": 15,
+        "blank": "5 秒"
+      }
+    },
+    {
+      "id": "popact_tp_cart",
+      "name": "Teleport to Cart",
+      "ja": "カートへテレポート",
+      "group": "boon"
+    },
+    {
+      "id": "popact_tp_truck",
+      "name": "Teleport to Truck",
+      "ja": "トラックへテレポート",
+      "group": "boon"
+    }
+  ]
+}
