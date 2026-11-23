@@ -1,0 +1,999 @@
+{
+  "schema": 1,
+  "mod": "popactmarket",
+  "modVersion": "1.1.0",
+  "groups": [
+    {
+      "key": "money",
+      "label": "お金"
+    },
+    {
+      "key": "customer",
+      "label": "客"
+    },
+    {
+      "key": "staff",
+      "label": "店員"
+    },
+    {
+      "key": "payment",
+      "label": "レジと支払い"
+    },
+    {
+      "key": "price",
+      "label": "値段"
+    },
+    {
+      "key": "shelf",
+      "label": "棚"
+    },
+    {
+      "key": "delivery",
+      "label": "届け物"
+    },
+    {
+      "key": "playerbox",
+      "label": "箱を持たせる"
+    },
+    {
+      "key": "store",
+      "label": "店"
+    },
+    {
+      "key": "player",
+      "label": "プレイヤー"
+    },
+    {
+      "key": "time",
+      "label": "時間と速さ"
+    },
+    {
+      "key": "other",
+      "label": "その他"
+    }
+  ],
+  "effects": [
+    {
+      "id": "money_add",
+      "name": "Give Money",
+      "ja": "お金を増やす",
+      "group": "money",
+      "param": "1000",
+      "paramSpec": {
+        "label": "金額",
+        "kind": "int",
+        "min": 1,
+        "max": 1000000
+      },
+      "required": true,
+      "duration": 0
+    },
+    {
+      "id": "money_take",
+      "name": "Take Money",
+      "ja": "お金を減らす（足りなければ 0 まで）",
+      "group": "money",
+      "param": "1000",
+      "paramSpec": {
+        "label": "金額",
+        "kind": "int",
+        "min": 1,
+        "max": 1000000
+      },
+      "required": true,
+      "duration": 0
+    },
+    {
+      "id": "spawn",
+      "name": "Spawn Customer",
+      "ja": "客を呼ぶ（頭の上に名前・開店中）",
+      "group": "customer",
+      "duration": 0
+    },
+    {
+      "id": "despawn",
+      "name": "Despawn Customer",
+      "ja": "客を 1 人帰す（買い物客がいるとき）",
+      "group": "customer",
+      "duration": 0
+    },
+    {
+      "id": "theft",
+      "name": "Complain About Theft",
+      "ja": "客が「これはサギだ！」と騒ぐ（買い物客がいるとき）",
+      "group": "customer",
+      "duration": 0
+    },
+    {
+      "id": "robbery",
+      "name": "This is a robbery!",
+      "ja": "客が「強盗だ！」と叫ぶ（買い物客がいるとき）",
+      "group": "customer",
+      "duration": 0
+    },
+    {
+      "id": "soup",
+      "name": "I'm at Soup!",
+      "ja": "客が「スープなう！」と言う（買い物客がいるとき）",
+      "group": "customer",
+      "duration": 0
+    },
+    {
+      "id": "breakfast",
+      "name": "It's Breakfast Time!",
+      "ja": "客が「朝ごはんの時間だ」と言う（買い物客がいるとき）",
+      "group": "customer",
+      "duration": 0
+    },
+    {
+      "id": "boneless",
+      "name": "Boneless?",
+      "ja": "客が「ピザを骨なしで！」と言う（買い物客がいるとき）",
+      "group": "customer",
+      "duration": 0
+    },
+    {
+      "id": "thief",
+      "name": "Spawn Shoplifter",
+      "ja": "泥棒を呼ぶ（頭の上に名前・開店中）",
+      "group": "customer",
+      "duration": 0
+    },
+    {
+      "id": "hirecashier",
+      "name": "Hire Cashier",
+      "ja": "レジ係を雇う（倉庫を買ったあと）",
+      "group": "staff",
+      "duration": 0
+    },
+    {
+      "id": "firecashier",
+      "name": "Fire Cashier",
+      "ja": "レジ係をクビにする（レジ係がいるとき）",
+      "group": "staff",
+      "duration": 0
+    },
+    {
+      "id": "hirerestocker",
+      "name": "Hire Restocker",
+      "ja": "品出し係を雇う（倉庫を買ったあと）",
+      "group": "staff",
+      "duration": 0
+    },
+    {
+      "id": "firerestocker",
+      "name": "Fire Restocker",
+      "ja": "品出し係をクビにする（品出し係がいるとき）",
+      "group": "staff",
+      "duration": 0
+    },
+    {
+      "id": "hirecustomerhelper",
+      "name": "Hire Customer Helper",
+      "ja": "案内係を雇う（倉庫を買ったあと）",
+      "group": "staff",
+      "duration": 0
+    },
+    {
+      "id": "firecustomerhelper",
+      "name": "Fire Customer Helper",
+      "ja": "案内係をクビにする（案内係がいるとき）",
+      "group": "staff",
+      "duration": 0
+    },
+    {
+      "id": "temp_cashier",
+      "name": "Gift Cashier (60s, boosted)",
+      "ja": "レジ係を呼ぶ（秒数を決める・ずっとブースト・頭の上に名前）",
+      "group": "staff",
+      "param": "60/300",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 10,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 0
+    },
+    {
+      "id": "temp_restocker",
+      "name": "Gift Restocker (60s, boosted)",
+      "ja": "品出し係を呼ぶ（秒数を決める・ずっとブースト・頭の上に名前）",
+      "group": "staff",
+      "param": "60/300",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 10,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 0
+    },
+    {
+      "id": "temp_customerhelper",
+      "name": "Gift Customer Helper (60s, boosted)",
+      "ja": "案内係を呼ぶ（秒数を決める・ずっとブースト・頭の上に名前）",
+      "group": "staff",
+      "param": "60/300",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 10,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 0
+    },
+    {
+      "id": "temp_securityguard",
+      "name": "Gift Security Guard (60s, boosted)",
+      "ja": "警備員を呼ぶ（秒数を決める・ずっとブースト・頭の上に名前）",
+      "group": "staff",
+      "param": "60/300",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 10,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 0
+    },
+    {
+      "id": "temp_janitor",
+      "name": "Gift Janitor (60s, boosted)",
+      "ja": "清掃員を呼ぶ（秒数を決める・ずっとブースト・頭の上に名前）",
+      "group": "staff",
+      "param": "60/300",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 10,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 0
+    },
+    {
+      "id": "temp_baker",
+      "name": "Gift Baker (60s, boosted)",
+      "ja": "パン職人を呼ぶ（秒数を決める・ずっとブースト・頭の上に名前・オーブンとパンの棚があるとき）",
+      "group": "staff",
+      "param": "60/300",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 10,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 0
+    },
+    {
+      "id": "temp_icecreamhelper",
+      "name": "Gift Ice Cream Helper (60s, boosted)",
+      "ja": "アイス係を呼ぶ（秒数を決める・ずっとブースト・頭の上に名前・アイスの売り場があるとき）",
+      "group": "staff",
+      "param": "60/300",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 10,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 0
+    },
+    {
+      "id": "forcepayment_cash",
+      "name": "Force Cash Only",
+      "ja": "客が現金だけで払う（レジの操作中に始まる）",
+      "group": "payment",
+      "param": "60/300",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 5,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 60
+    },
+    {
+      "id": "forcepayment_card",
+      "name": "Force Card Only",
+      "ja": "客がカードだけで払う（レジの操作中に始まる）",
+      "group": "payment",
+      "param": "60/300",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 5,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 60
+    },
+    {
+      "id": "forceexactchange",
+      "name": "Force Exact Change",
+      "ja": "客がちょうどの額で払う（レジの操作中に始まる）",
+      "group": "payment",
+      "param": "60/300",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 5,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 60
+    },
+    {
+      "id": "forcerequirechange",
+      "name": "Customers Overpay",
+      "ja": "客がおつりの要る額で払う（レジの操作中に始まる）",
+      "group": "payment",
+      "param": "60/300",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 5,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 60
+    },
+    {
+      "id": "forcelargebills",
+      "name": "Force Large Bills",
+      "ja": "客が大きいお札で払う（レジの操作中に始まる）",
+      "group": "payment",
+      "param": "60/300",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 5,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 60
+    },
+    {
+      "id": "allowmischarges",
+      "name": "Allow Credit Mischarges",
+      "ja": "カードの打ち間違いを許す（レジの操作中に始まる）",
+      "group": "payment",
+      "param": "60/300",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 5,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 60
+    },
+    {
+      "id": "forcemath",
+      "name": "Force Math",
+      "ja": "おつりを自分で計算（レジの操作中に始まる）",
+      "group": "payment",
+      "param": "60/300",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 5,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 60
+    },
+    {
+      "id": "pricesup",
+      "name": "Raise All Prices",
+      "ja": "値段を全部上げる",
+      "group": "price",
+      "param": "0.50",
+      "paramSpec": {
+        "label": "金額",
+        "hint": "ドル（セントまで）",
+        "kind": "int",
+        "min": 0.01,
+        "max": 100,
+        "decimals": 2
+      },
+      "duration": 0
+    },
+    {
+      "id": "pricesdown",
+      "name": "Lower All Prices",
+      "ja": "値段を全部下げる（0.25 ドルより下にはしない）",
+      "group": "price",
+      "param": "0.50",
+      "paramSpec": {
+        "label": "金額",
+        "hint": "ドル（セントまで）",
+        "kind": "int",
+        "min": 0.01,
+        "max": 100,
+        "decimals": 2
+      },
+      "duration": 0
+    },
+    {
+      "id": "priceup",
+      "name": "Raise Random Price",
+      "ja": "どれか 1 つの値段を上げる",
+      "group": "price",
+      "param": "0.50",
+      "paramSpec": {
+        "label": "金額",
+        "hint": "ドル（セントまで）",
+        "kind": "int",
+        "min": 0.01,
+        "max": 100,
+        "decimals": 2
+      },
+      "duration": 0
+    },
+    {
+      "id": "pricedown",
+      "name": "Lower Random Price",
+      "ja": "どれか 1 つの値段を下げる（0.25 ドルより下にはしない）",
+      "group": "price",
+      "param": "0.50",
+      "paramSpec": {
+        "label": "金額",
+        "hint": "ドル（セントまで）",
+        "kind": "int",
+        "min": 0.01,
+        "max": 100,
+        "decimals": 2
+      },
+      "duration": 0
+    },
+    {
+      "id": "removeitem",
+      "name": "Remove Item From Shelf",
+      "ja": "棚から商品を消す",
+      "group": "shelf",
+      "param": "1",
+      "paramSpec": {
+        "label": "個数",
+        "kind": "int",
+        "min": 1,
+        "max": 50
+      },
+      "duration": 0
+    },
+    {
+      "id": "additem",
+      "name": "Add Item To Shelf",
+      "ja": "棚に商品を足す（値札のある棚）",
+      "group": "shelf",
+      "param": "1",
+      "paramSpec": {
+        "label": "個数",
+        "kind": "int",
+        "min": 1,
+        "max": 50
+      },
+      "duration": 0
+    },
+    {
+      "id": "deliver",
+      "name": "Deliver Item",
+      "ja": "届け物",
+      "group": "delivery",
+      "param": "any",
+      "paramSpec": {
+        "label": "品物",
+        "kind": "choice",
+        "dynamic": true,
+        "items": "items"
+      },
+      "duration": 0
+    },
+    {
+      "id": "clearunusedboxes",
+      "name": "Clear Unused Boxes",
+      "ja": "触っていない箱を片付ける",
+      "group": "delivery",
+      "duration": 0
+    },
+    {
+      "id": "holdbox",
+      "name": "Send a Box to Player",
+      "ja": "箱を持たせる",
+      "group": "playerbox",
+      "param": "any",
+      "paramSpec": {
+        "label": "品物",
+        "kind": "choice",
+        "dynamic": true,
+        "items": "items"
+      },
+      "duration": 0
+    },
+    {
+      "id": "emptybox",
+      "name": "Send an Empty Box to Player",
+      "ja": "空き箱を持たせる",
+      "group": "playerbox",
+      "param": "medium",
+      "paramSpec": {
+        "label": "大きさ",
+        "kind": "choice",
+        "options": [
+          {
+            "value": "small",
+            "label": "小さい"
+          },
+          {
+            "value": "medium",
+            "label": "中くらい"
+          },
+          {
+            "value": "large",
+            "label": "大きい"
+          }
+        ]
+      },
+      "duration": 0
+    },
+    {
+      "id": "open",
+      "name": "Open Store",
+      "ja": "店を開ける（閉まっているとき）",
+      "group": "store",
+      "duration": 0
+    },
+    {
+      "id": "close",
+      "name": "Close Store",
+      "ja": "店を閉める（開いているとき）",
+      "group": "store",
+      "duration": 0
+    },
+    {
+      "id": "lightson",
+      "name": "Turn Lights On",
+      "ja": "電気をつける（消えているとき）",
+      "group": "store",
+      "duration": 0
+    },
+    {
+      "id": "lightsoff",
+      "name": "Turn Lights Off",
+      "ja": "電気を消す（ついているとき）",
+      "group": "store",
+      "duration": 0
+    },
+    {
+      "id": "levelup",
+      "name": "Store Level +1",
+      "ja": "店舗レベル +1（いちばん上のときは動かない）",
+      "group": "store",
+      "duration": 0
+    },
+    {
+      "id": "leveldown",
+      "name": "Store Level -1",
+      "ja": "店舗レベル −1（いちばん下のときは動かない）",
+      "group": "store",
+      "duration": 0
+    },
+    {
+      "id": "upgrade",
+      "name": "Upgrade Store",
+      "ja": "店を広げる",
+      "group": "store",
+      "duration": 0
+    },
+    {
+      "id": "upgradeb",
+      "name": "Upgrade Storage",
+      "ja": "倉庫を広げる（倉庫を買ったあと）",
+      "group": "store",
+      "duration": 0
+    },
+    {
+      "id": "spawngarbage",
+      "name": "Spawn Garbage and Dirt",
+      "ja": "ゴミと汚れを散らかす",
+      "group": "store",
+      "param": "3",
+      "paramSpec": {
+        "label": "個数",
+        "kind": "int",
+        "min": 1,
+        "max": 50
+      },
+      "duration": 0
+    },
+    {
+      "id": "cleanall",
+      "name": "Clean All Garbage and Dirt",
+      "ja": "ゴミと汚れを全部片付ける",
+      "group": "store",
+      "duration": 0
+    },
+    {
+      "id": "cleanup",
+      "name": "Clean Garbage and Dirt",
+      "ja": "ゴミと汚れを片付ける",
+      "group": "store",
+      "param": "3",
+      "paramSpec": {
+        "label": "個数",
+        "kind": "int",
+        "min": 1,
+        "max": 50
+      },
+      "duration": 0
+    },
+    {
+      "id": "highfov",
+      "name": "High FOV",
+      "ja": "視野を広くする",
+      "group": "player",
+      "param": "30/150",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 5,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 30
+    },
+    {
+      "id": "lowfov",
+      "name": "Low FOV",
+      "ja": "視野を狭くする",
+      "group": "player",
+      "param": "30/150",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 5,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 30
+    },
+    {
+      "id": "invertx",
+      "name": "Invert X-Axis",
+      "ja": "視点の左右が反対",
+      "group": "player",
+      "param": "30/150",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 5,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 30
+    },
+    {
+      "id": "inverty",
+      "name": "Invert Y-Axis",
+      "ja": "視点の上下が反対",
+      "group": "player",
+      "param": "30/150",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 5,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 30
+    },
+    {
+      "id": "drop",
+      "name": "Drop Held Item",
+      "ja": "持っている物を落とす（箱を持っているとき）",
+      "group": "player",
+      "duration": 0
+    },
+    {
+      "id": "throw",
+      "name": "Throw Held Item",
+      "ja": "持っている物を投げる（箱を持っているとき）",
+      "group": "player",
+      "duration": 0
+    },
+    {
+      "id": "teleport_random",
+      "name": "Random Teleport",
+      "ja": "ランダムテレポート（店の外の決まった 11 か所のどこか）",
+      "group": "player",
+      "duration": 0
+    },
+    {
+      "id": "teleport_computer",
+      "name": "Teleport to Computer",
+      "ja": "パソコンの前へテレポート",
+      "group": "player",
+      "duration": 0
+    },
+    {
+      "id": "ultraslow",
+      "name": "Game Speed: Ultra Slow",
+      "ja": "ゲームがとても遅くなる",
+      "group": "time",
+      "param": "15/75",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 5,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 15
+    },
+    {
+      "id": "slow",
+      "name": "Game Speed: Slow",
+      "ja": "ゲームが遅くなる",
+      "group": "time",
+      "param": "30/150",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 5,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 30
+    },
+    {
+      "id": "fast",
+      "name": "Game Speed: Fast",
+      "ja": "ゲームが速くなる",
+      "group": "time",
+      "param": "30/150",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 5,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 30
+    },
+    {
+      "id": "ultrafast",
+      "name": "Game Speed: Ultra Fast",
+      "ja": "ゲームがとても速くなる",
+      "group": "time",
+      "param": "15/75",
+      "paramSpec": {
+        "kind": "ints",
+        "fields": [
+          {
+            "label": "秒数",
+            "min": 5,
+            "max": 600
+          },
+          {
+            "label": "最長",
+            "hint": "連打で延ばせる長さ",
+            "min": 10,
+            "max": 3600
+          }
+        ]
+      },
+      "duration": 15
+    },
+    {
+      "id": "plushour",
+      "name": "Advance Time One Hour",
+      "ja": "時計を 1 時間進める",
+      "group": "time",
+      "duration": 0
+    },
+    {
+      "id": "minushour",
+      "name": "Rollback Time One Hour",
+      "ja": "時計を 1 時間戻す",
+      "group": "time",
+      "duration": 0
+    }
+  ]
+}
