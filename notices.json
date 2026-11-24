@@ -1,6 +1,14 @@
 {
   "notices": [
     {
+      "id": "release-1.3.8",
+      "date": "2026-11-25",
+      "title": "1.3.8 を出しました",
+      "body": "PopAct 1.3.8 を出しました。1.3.0 以降をお使いの方は、起動したときに自動で入れ替わります（設定・ルール・メディア・集計はそのまま残ります）。\n\n1.3.8 で変わったこと:\n・Goose Egg Rush 連携: TikTok LIVE Studio のゲーム「Goose Egg Rush」に、ギフトでゲームの効果（鉄の檻・ロードローラーなど 44 個）を送れます（ゲーム連携プラン）。送信の方法「🪿 Goose Egg Rush」とテンプレートがあり、準備はゲーム連携のタブの「Goose Egg Rush の準備」のボタン 1 つです\n・ギフトジャー: 柱の形の瓶で、玉が多いときの動きを軽くしました\n\nくわしくはリリースノートをご覧ください。",
+      "link": "https://github.com/popact/popact.github.io/releases/tag/v1.3.8",
+      "kind": "update"
+    },
+    {
       "id": "release-1.3.7",
       "date": "2026-11-24",
       "title": "1.3.7 を出しました",
