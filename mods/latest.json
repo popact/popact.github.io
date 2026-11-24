@@ -17,6 +17,12 @@
       "url": "https://github.com/popact/popact.github.io/releases/download/popactrepo-v0.8.0/PopActREPO-0.8.0.zip",
       "sha256": "fee1303761e842083c41762ae0db6e3d90fdd9986b5caacd71161cae9d222e08",
       "size": 57085
+    },
+    "popactgoose": {
+      "version": "0.1.5",
+      "url": "https://github.com/popact/popact.github.io/releases/download/popactgoose-v0.1.5/PopActGoose-0.1.5.zip",
+      "sha256": "79b875148b48ddf8b8f26aeb2ce14c6ee443dabdf3b72349e57e975808d42738",
+      "size": 30672975
     }
   }
 }
