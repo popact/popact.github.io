@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "mod": "popactrepo",
-  "modVersion": "0.8.0",
+  "modVersion": "0.9.0",
   "groups": [
     {
       "key": "enemy",
@@ -25,7 +25,7 @@
       "id": "popact_enemy_swap",
       "name": "Swap Enemies",
       "ja": "敵を入れ替える",
-      "group": "event",
+      "group": "enemy",
       "paramSpec": {
         "label": "入れ替え方",
         "kind": "choice",
@@ -43,6 +43,20 @@
             "label": "弱くする"
           }
         ]
+      }
+    },
+    {
+      "id": "popact_enemy_count",
+      "name": "Enemy Count",
+      "ja": "敵の数を知らせる",
+      "group": "enemy",
+      "paramSpec": {
+        "label": "出す秒数",
+        "hint": "「敵 N 体」を画面に出す秒数（3〜15）。空なら 5 秒",
+        "kind": "int",
+        "min": 3,
+        "max": 15,
+        "blank": "5 秒"
       }
     },
     {
@@ -117,6 +131,12 @@
       "id": "popact_kill",
       "name": "Kill Player",
       "ja": "プレイヤーを倒す",
+      "group": "event"
+    },
+    {
+      "id": "popact_valuable_remove",
+      "name": "Remove Valuable",
+      "ja": "お宝を 1 つ消す",
       "group": "event"
     },
     {
@@ -223,20 +243,6 @@
       "group": "boon"
     },
     {
-      "id": "popact_enemy_count",
-      "name": "Enemy Count",
-      "ja": "敵の数を知らせる",
-      "group": "boon",
-      "paramSpec": {
-        "label": "出す秒数",
-        "hint": "「敵 N 体」を画面に出す秒数（3〜15）。空なら 5 秒",
-        "kind": "int",
-        "min": 3,
-        "max": 15,
-        "blank": "5 秒"
-      }
-    },
-    {
       "id": "popact_tp_cart",
       "name": "Teleport to Cart",
       "ja": "カートへテレポート",
@@ -247,6 +253,44 @@
       "name": "Teleport to Truck",
       "ja": "トラックへテレポート",
       "group": "boon"
+    },
+    {
+      "id": "popact_weapon",
+      "name": "Spawn Weapon",
+      "ja": "武器を出す",
+      "group": "boon",
+      "paramSpec": {
+        "label": "武器",
+        "kind": "choice",
+        "dynamic": true,
+        "items": "repoweapons"
+      }
+    },
+    {
+      "id": "popact_item",
+      "name": "Spawn Item",
+      "ja": "道具を出す",
+      "group": "boon",
+      "paramSpec": {
+        "label": "道具",
+        "kind": "choice",
+        "dynamic": true,
+        "items": "repotools"
+      }
+    },
+    {
+      "id": "popact_valuable_up",
+      "name": "Raise Valuable Price",
+      "ja": "お宝の値段を上げる",
+      "group": "boon",
+      "paramSpec": {
+        "label": "上げる割合（%）",
+        "hint": "今の値段の何 % 上げるか（1〜1000）。空なら 50 %",
+        "kind": "int",
+        "min": 1,
+        "max": 1000,
+        "blank": "50 %"
+      }
     }
   ]
 }
