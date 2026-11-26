@@ -312,14 +312,15 @@
   <div>
     <h1>ギフトが、<br>ゲームを動かす。</h1>
     <p class="lead">TikTok LIVE のギフト・コメント・いいねで、Minecraft・GTA V・R.E.P.O. などのゲームが動きます（GTA V などはゲーム連携プラン）。コメントの読み上げと配信画面の演出もついた、Windows 用の配信ツールです。</p>
-    <!-- ダウンロードは Releases のいちばん新しい版のページへ。zip の名前に版番号が入る（build-package.js の PopAct-<版>.zip）ので、zip へ直接はつながない。
-         たま屋スプリントの版を Releases に出すときは「Latest」にしない（gh release create … --latest=false）。Latest になると、このボタンがゲームの版を開く -->
+    <!-- ダウンロードは Releases の Latest の PopAct.zip（中のフォルダは PopAct/。build-package.js が作り、tools/release-app.mjs が上げる）を直接落とす。
+         同じ版の PopAct-<版>.zip は自動更新の係が使う（名前を変えられない）ので、案内しない。
+         たま屋スプリントや MOD の版を Releases に出すときは「Latest」にしない（gh release create … --latest=false）。Latest になると、このボタンが 404 になる -->
     <div class="actions">
-      <a class="btn" href="https://github.com/popact/popact.github.io/releases/latest" target="_blank" rel="noopener" aria-describedby="dl-note">
+      <a class="btn" href="https://github.com/popact/popact.github.io/releases/latest/download/PopAct.zip" aria-describedby="dl-note">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11 3h2v10.2l3.6-3.6 1.4 1.4-6 6-6-6 1.4-1.4 3.6 3.6zM4 19h16v2H4z"/></svg>無料版をダウンロード</a>
       <a class="btn ghost" href="#pricing">料金を見る</a>
     </div>
-    <p class="fine" id="dl-note"><b>Windows 10 / 11</b>。開いたページの「Assets」から<span class="nw">「PopAct-（版の番号）.zip」</span>を選んでください（Source code ではありません）。</p>
+    <p class="fine" id="dl-note"><b>Windows 10 / 11</b>。<span class="nw">「PopAct.zip」</span>がダウンロードされます。好きな場所に展開して、中の<span class="nw">「PopAct.exe」</span>を開いてください。新しい版は起動のときに自動で入れ替わります。</p>
     <p class="fine">無料版はずっと無料。TikTok には配信者のユーザー名を入れるだけでつながります（ログインは視聴者のメンバーレベルを見張るときだけ）。</p>
   </div>
 
@@ -573,10 +574,10 @@
   <h2>まずは無料版から</h2>
   <p class="lead">ずっと無料で使えます。足りなくなったら、その分野のプランを足してください。</p>
   <div class="actions">
-      <a class="btn" href="https://github.com/popact/popact.github.io/releases/latest" target="_blank" rel="noopener" aria-describedby="dl-note2">
+      <a class="btn" href="https://github.com/popact/popact.github.io/releases/latest/download/PopAct.zip" aria-describedby="dl-note2">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11 3h2v10.2l3.6-3.6 1.4 1.4-6 6-6-6 1.4-1.4 3.6 3.6zM4 19h16v2H4z"/></svg>無料版をダウンロード</a>
   </div>
-  <p class="fine" id="dl-note2"><b>Windows 10 / 11</b>。開いたページの「Assets」から<span class="nw">「PopAct-（版の番号）.zip」</span>を選んでください。</p>
+  <p class="fine" id="dl-note2"><b>Windows 10 / 11</b>。<span class="nw">「PopAct.zip」</span>がダウンロードされます。新しい版は起動のときに自動で入れ替わります。</p>
 </div>
 </section>
 </main>
